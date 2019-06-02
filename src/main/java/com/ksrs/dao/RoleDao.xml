@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.ksrs.dao.RoleDao">
+    <select id="getAll" resultType="com.ksrs.entity.Role">
+       select * from role
+    </select>
+    <select id="getByName" resultType="com.ksrs.entity.Role">
+        select * from role where rolename=#{rolename}
+    </select>
+    <insert id="fenpei" parameterType="java.util.Map">
+        insert into role_user(user_id,role_id) values(#{user_id},#{role_id})
+    </insert>
+    <update id="updateFenpei" parameterType="java.lang.Integer">
+        update role_user set role_id=${role_id} where user_id=${user_id}
+    </update>
+    <insert id="insertPerm" parameterType="java.util.Map">
+        insert into role_menu(role_id,menu_id) values(#{role_id},#{menu_id})
+    </insert>
+   <delete id="deletePerm" >
+       delete from role_menu where role_id=#{role_id}
+   </delete>
+    <select id="test" resultType="int">
+        select count(*) from role_menu where role_id=#{role_id}
+    </select>
+    <delete id="deleteRole_user">
+        delete from role_user where "user_id"=#{user_id}
+    </delete>
+
+</mapper>

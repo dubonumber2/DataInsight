@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>ECharts</title>
+    <!-- 引入 echarts.js -->
+    <script src="echarts.js"></script>
+    <link rel="stylesheet" href="/layui/css/layui.css" media="all">
+    <script src="/layui/jquery.min.js"></script>
+    <script src="/layui/macarons.js"></script>
+</head>
+<body>
+<!-- 为ECharts准备一个具备大小（宽高）的Dom -->
+<!--<div id="main" style="width: 500px;height:400px;position: relative;left: 0"></div>-->
+<div>
+    <label class="layui-form-label">范围选择</label>
+    <div class="layui-input-inline">
+        <input class="layui-input laydate-icon" placeholder="起始日期" id="startDate">
+    </div>
+    <div class="layui-input-inline">
+        <input class="layui-input laydate-icon" placeholder="截止日期"  id="endDate">
+    </div>
+
+    <div id="zhexian" style="width:950px;height: 400px;position: absolute;left:2%;top: 10%">
+
+    </div>
+</div>
+
+<script type="text/javascript" src="layui/layui.all.js"></script>
+<script src="/layui/layer.js"></script>
+<script type="text/javascript">
+
+
+
+
+
+
+    var date1;
+    var myChart1 = echarts.init(document.getElementById('zhexian'),'macarons');
+
+    $.ajax({
+        url:'/logsip/getSaotu.action',
+        dataType:'json',
+        async:false,
+        type:'post',
+        success:function (data) {
+            date1=data;
+        }
+
+    });
+    var ipSendHttp=[];
+    var sendHttpCounts=[];
+    var sendRedCounts=[];
+    var sendVisitCounts=[];
+    var countTime=[];
+    for(var i=0;i<date1.length;i++){
+        var ips=date1[i].ipSendHttp/10000;
+        ipSendHttp.push(ips);
+        var sdhc=date1[i].sendHttpCounts/10000;
+        sendHttpCounts.push(sdhc);
+        var src=date1[i].sendRedCounts/10000;
+        sendRedCounts.push(src);
+        var svc=date1[i].sendVisitCounts/10000;
+        sendVisitCounts.push(svc);
+        countTime.push(date1[i].countTime);
+    }
+    option = {
+        tooltip : {
+            trigger: 'axis',
+            axisPointer : {            // 坐标轴指示器，坐标轴触发有效
+                type : 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+            }
+        },
+        legend: {
+            data: ['重定向次数', '访问到有效页面数','代理ip的http请求数','请求总数']
+        },
+        grid: {
+            left: '3%',
+            right: '4%',
+            bottom: '3%',
+            containLabel: true
+        },
+        xAxis:  {
+            type: 'value',
+            axisLabel:{
+                formatter: '{value} 万'
+            }
+        },
+        yAxis: {
+            type: 'category',
+            data: countTime
+        },
+        series: [
+            {
+                name: '重定向次数',
+                type: 'bar',
+                stack: '总量',
+                label: {
+                    normal: {
+                        show: false,
+                        position: 'insideRight'
+                    }
+                },
+                data: sendRedCounts
+            },
+            {
+                name: '访问到有效页面数',
+                type: 'bar',
+                stack: '总量',
+                label: {
+                    normal: {
+                        show: true,
+                        position: 'insideRight'
+                    }
+                },
+                data: sendVisitCounts
+            },
+            {
+                name: '代理ip的http请求数',
+                type: 'bar',
+                stack: '总量',
+                label: {
+                    normal: {
+                        show: true,
+                        position: 'insideRight'
+                    }
+                },
+                data: ipSendHttp
+            },
+            {
+                name: '请求总数',
+                type: 'bar',
+                stack: '总量',
+                label: {
+                    normal: {
+                        show: true,
+                        position: 'insideRight'
+                    }
+                },
+                data: sendHttpCounts
+            }
+        ]
+    };
+    myChart1.setOption(option);
+</script>
+
+</body>
+</html>

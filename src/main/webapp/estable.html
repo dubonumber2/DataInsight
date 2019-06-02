@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+        <meta charset="utf-8">
+        <title>es线上数据统计</title>
+        <link rel="stylesheet" href="/layui/css/layui.css" media="all">
+    <script src="/layui/jquery.min.js"></script>
+    </head>
+<body>
+
+
+
+
+
+<table id='es' class="layui-table" lay-data="{fixed:true,height:'full-10',cellMinWidth: 80, url:'/esearch/getData.action',id:'test'}" lay-filter="test">
+    <thead>
+    <tr>
+
+        <th lay-data="{field:'province'}">省份</th>
+        <th lay-data="{field:'haveTelephone',sort: true}">有固话的公司数量</th>
+        <th lay-data="{field:'haveCellphone',event:'test'}">有手机的公司数量</th>
+        <th lay-data="{field:'telePhoneAndCellPhone',sort: true}">既有手机和固话</th>
+        <th lay-data="{field: 'telephoneCount',sort:true}">好的固话数量</th>
+        <th lay-data="{field: 'cellphoneCount',sort:true}">好的手机数量</th>
+        <th lay-data="{field: 'badTelephoneCount',sort:true}">坏的固话数量</th>
+        <th lay-data="{field: 'badCellphoneCount',sort:true}">坏的手机数量</th>
+
+
+    </tr>
+    </thead>
+</table>
+
+<script src="/layui/layui.js"></script>
+<script type="text/javascript" src="layui/layui.all.js"></script>
+<script>
+    var table;
+    layui.use('table', function(){
+        table = layui.table;
+    });
+</script>
+</body>
+</html>

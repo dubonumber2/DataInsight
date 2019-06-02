@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>ECharts</title>
+    <!-- 引入 echarts.js -->
+    <script src="echarts.js"></script>
+    <link rel="stylesheet" href="/layui/css/layui.css" media="all">
+    <script src="/layui/jquery.min.js"></script>
+    <script src="/layui/macarons.js"></script>
+</head>
+<body>
+<!-- 为ECharts准备一个具备大小（宽高）的Dom -->
+<!--<div id="main" style="width: 500px;height:400px;position: relative;left: 0"></div>-->
+<div>
+    <label class="layui-form-label">范围选择</label>
+    <div class="layui-input-inline">
+        <input class="layui-input laydate-icon" placeholder="起始日期" id="stardate">
+    </div>
+    <div class="layui-input-inline">
+        <input class="layui-input laydate-icon" placeholder="截止日期"  id="enddate">
+    </div>
+    <div class="layui-input-inline">
+
+    <div class="layui-form" lay-filter="test2">
+
+        <div class="layui-input-block">
+            <select name="comname" lay-filter="company" id="comname" lay-search="">
+
+
+
+            </select>
+        </div>
+    </div>
+</div>
+    <div id="zhexian" style="width:950px;height: 400px;position: absolute;left:2%;top: 10%">
+
+    </div>
+</div>
+
+<script type="text/javascript" src="layui/layui.all.js"></script>
+<script src="/layui/layer.js"></script>
+<script type="text/javascript">
+
+
+
+
+
+
+    var comname="";
+    var date1;
+    var myChart1 = echarts.init(document.getElementById('zhexian'),'macarons');
+
+    $.ajax({
+        url:'/lingan/getData.action',
+        dataType:'json',
+        async:false,
+        type:'post',
+        success:function (data) {
+            date1=data;
+        }
+
+    });
+
+    var icl=[];
+    var icd=[];
+    var icln=[];
+    var createTime=[];
+    for(var i=0;i<date1.length;i++){
+        icl.push(date1[i].icl);
+        icd.push(date1[i].icd);
+        icln.push(date1[i].icln);
+        createTime.push(date1[i].createTime);
+    }
+    option = {
+        title: {
+            text: '近一周爬虫抓取统计',
+            subtext: '真实数据'
+        },
+        tooltip: {
+            trigger: 'axis'
+        },
+        legend: {
+            data:['日列表抓取总量','日详情抓取总量','日列表更新总量']
+        },
+        toolbox: {
+            show: true,
+            feature: {
+                dataZoom: {
+                    yAxisIndex: 'none'
+                },
+                dataView: {readOnly: false},
+                magicType: {type: ['line', 'bar']},
+                restore: {},
+                saveAsImage: {}
+            }
+        },
+        xAxis:  {
+            type: 'category',
+            boundaryGap: false,
+            data: createTime
+        },
+        yAxis: {
+            type: 'value',
+            axisLabel: {
+                formatter: '{value}'
+            }
+        },
+        series: [
+            {
+                name:'日列表抓取总量',
+                type:'line',
+                data:icl,
+
+            },
+            {
+                name:'日详情抓取总量',
+                type:'line',
+                data:icd,
+
+            },{
+                name:'日列表更新总量',
+                type:'line',
+                data:icln,
+            }
+        ]
+    };
+
+
+    // 使用刚指定的配置项和数据显示图表。
+    myChart1.setOption(option);
+    var jsondt;
+    var str="";
+
+    $.ajax({
+        url:'/comname/getAllName.action',
+        type:'post',
+        dataType:'json',
+        async:false,
+        success:function(data){
+
+            jsondt=data;
+        }
+    });
+    str+='<option value="">按公司名选择或搜索</option>'
+    for(var i=0;i<jsondt.length;i++){
+        str+='<option value="'+jsondt[i].name+'">'+jsondt[i].name+'</option>'
+    };
+
+
+
+    document.getElementById("comname").innerHTML=str;
+
+    var stardate="";
+    var enddate="";
+    var comname="";
+    layui.use('laydate', function(){
+        var laydate = layui.laydate;
+
+        //执行一个laydate实例
+        laydate.render({
+            elem: '#stardate', //指定元素
+            done:function(value){
+
+                stardate=value;
+
+            }
+        });
+    });
+    layui.use('laydate', function(){
+        var laydate = layui.laydate;
+
+        //执行一个laydate实例
+        laydate.render({
+            elem: '#enddate', //指定元素
+            done:function(value){
+                enddate=value;
+                $.ajax({
+                    url:'/lingan/getData.action?starDate='+stardate+'&endDate='+enddate,
+                    dataType:'json',
+                    async:false,
+                    type:'post',
+                    success:function (data) {
+                        date1=data;
+                    }
+
+                });
+
+                var icl=[];
+                var icd=[];
+                var icln=[];
+                var createTime=[];
+                for(var i=0;i<date1.length;i++){
+                    icl.push(date1[i].icl);
+                    icd.push(date1[i].icd);
+                    icln.push(date1[i].icln);
+                    createTime.push(date1[i].createTime);
+                }
+                option = {
+                    title: {
+                        text: '近一周爬虫抓取统计',
+                        subtext: '真实数据'
+                    },
+                    tooltip: {
+                        trigger: 'axis'
+                    },
+                    legend: {
+                        data:['日列表抓取总量','日详情抓取总量','日列表更新总量']
+                    },
+                    toolbox: {
+                        show: true,
+                        feature: {
+                            dataZoom: {
+                                yAxisIndex: 'none'
+                            },
+                            dataView: {readOnly: false},
+                            magicType: {type: ['line', 'bar']},
+                            restore: {},
+                            saveAsImage: {}
+                        }
+                    },
+                    xAxis:  {
+                        type: 'category',
+                        boundaryGap: false,
+                        data: createTime
+                    },
+                    yAxis: {
+                        type: 'value',
+                        axisLabel: {
+                            formatter: '{value}'
+                        }
+                    },
+                    series: [
+                        {
+                            name:'日列表抓取总量',
+                            type:'line',
+                            data:icl,
+
+                        },
+                        {
+                            name:'日详情抓取总量',
+                            type:'line',
+                            data:icd,
+
+                        },{
+                            name:'日列表更新总量',
+                            type:'line',
+                            data:icln,
+                        }
+                    ]
+                };
+
+
+                // 使用刚指定的配置项和数据显示图表。
+                myChart1.setOption(option);
+
+            }
+        });
+    });
+
+
+    var form=layui.form;
+    form.render('select', 'test2');
+    form.on('select', function(data){
+        if((stardate==null||stardate==""||"undefined"==stardate)||(enddate==null||enddate==""||"undefined"==enddate)){
+            layer.msg("亲，请先选择时间范围",{icon:2})
+        }
+        comname=data.value;
+
+
+        $.ajax({
+            url:'/lingan/getData.action?starDate='+stardate+'&endDate='+enddate+'&comname='+comname,
+            dataType:'json',
+            async:false,
+            type:'post',
+            success:function (data) {
+                date1=data;
+            }
+
+        });
+
+        var icl=[];
+        var icd=[];
+        var icln=[];
+        var createTime=[];
+        for(var i=0;i<date1.length;i++){
+            icl.push(date1[i].icl);
+            icd.push(date1[i].icd);
+            icln.push(date1[i].icln);
+            createTime.push(date1[i].createTime);
+        }
+        option = {
+            title: {
+                text: '近一周爬虫抓取统计',
+                subtext: '真实数据'
+            },
+            tooltip: {
+                trigger: 'axis'
+            },
+            legend: {
+                data:['日列表抓取总量','日详情抓取总量','日列表更新总量']
+            },
+            toolbox: {
+                show: true,
+                feature: {
+                    dataZoom: {
+                        yAxisIndex: 'none'
+                    },
+                    dataView: {readOnly: false},
+                    magicType: {type: ['line', 'bar']},
+                    restore: {},
+                    saveAsImage: {}
+                }
+            },
+            xAxis:  {
+                type: 'category',
+                boundaryGap: false,
+                data: createTime
+            },
+            yAxis: {
+                type: 'value',
+                axisLabel: {
+                    formatter: '{value}'
+                }
+            },
+            series: [
+                {
+                    name:'日列表抓取总量',
+                    type:'line',
+                    data:icl,
+
+                },
+                {
+                    name:'日详情抓取总量',
+                    type:'line',
+                    data:icd,
+
+                },{
+                    name:'日列表更新总量',
+                    type:'line',
+                    data:icln,
+                }
+            ]
+        };
+
+
+        // 使用刚指定的配置项和数据显示图表。
+        myChart1.setOption(option);
+
+
+    });
+
+
+</script>
+</body>
+</html>

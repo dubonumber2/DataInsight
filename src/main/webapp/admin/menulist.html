@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="/layui/css/layui.css" media="all">
+    <link rel="stylesheet" type="text/css" href="tree/icon.css" />
+    <link rel="stylesheet" type="text/css"
+          href="tree/easyui.css" />
+    <script src="/layui/jquery.min.js"></script>
+    <script type="text/javascript" src="tree/jquery.easyui.min.js"></script>
+    <script src="/layui/layui.all.js"></script>
+    <script type="text/javascript">
+        $(function(){
+            $('#fenpei').tree({
+                url:'/menu/getMenuTree.action',
+                checkbox:true
+            });
+        })
+
+    </script>
+</head>
+<body>
+<div id="fenpei" class="easyui-dialog" title="分配权限"
+     style="width: 500px; height: 300px;"
+     data-options="iconCls:'icon-add',resizable:false,modal:true,closed:true">
+
+</div>
+</body>
+</html>

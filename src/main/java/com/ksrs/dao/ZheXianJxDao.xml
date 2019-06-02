@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.ksrs.dao.ZheXianJxDao">
+    <select id="getDate" resultType="com.ksrs.entity.ZheXianJx">
+        select * from (select sum(a.detNum-b.detNum)+110560+496 as sumToday from(select detNum ,name from parser_count_statistics_save where TO_DAYS(createTime)=TO_DAYS(NOW())) a,
+        (select detNum ,name from parser_count_statistics ) b where a.name=b.name ) z,
+        (select sum(a.detNum-b.detNum)+110560+496 as sumYes from(select detNum ,name from parser_count_statistics_save where TO_DAYS(createTime)=TO_DAYS(NOW())-1) a,
+        (select detNum ,name from parser_count_statistics ) b where a.name=b.name ) y,
+        (select sum(a.detNum-b.detNum)+110560+496 as sumAgo from(select detNum ,name from parser_count_statistics_save where TO_DAYS(createTime)=TO_DAYS(NOW())-2) a,
+        (select detNum ,name from parser_count_statistics ) b where a.name=b.name ) x,
+        (select sum(a.detNum-b.detNum)+110560+496 as sumAgo1 from(select detNum ,name from parser_count_statistics_save where TO_DAYS(createTime)=TO_DAYS(NOW())-3) a,
+        (select detNum ,name from parser_count_statistics ) b where a.name=b.name ) v,
+        (select sum(a.detNum-b.detNum)+110560+187 as sumAgo2 from(select detNum ,name from parser_count_statistics_save where TO_DAYS(createTime)=TO_DAYS(NOW())-4) a,
+        (select detNum ,name from parser_count_statistics ) b where a.name=b.name ) u,
+        (select sum(a.detNum-b.detNum)+110560+187 as sumAgo3 from(select detNum ,name from parser_count_statistics_save where TO_DAYS(createTime)=TO_DAYS(NOW())-5) a,
+        (select detNum ,name from parser_count_statistics ) b where a.name=b.name ) u1,
+        (select sum(a.detNum-b.detNum)+110560+187 as sumAgo4 from(select detNum ,name from parser_count_statistics_save where TO_DAYS(createTime)=TO_DAYS(NOW())-6) a,
+        (select detNum ,name from parser_count_statistics ) b where a.name=b.name ) u2
+    </select>
+    <select id="getDateByName" resultType="com.ksrs.entity.ZheXianJx">
+        select * from (select a.detNum-b.detNum as sumToday from(select detNum ,name from parser_count_statistics_save where TO_DAYS(createTime)=TO_DAYS(NOW())) a,
+        (select detNum ,name from parser_count_statistics ) b where a.name=b.name and a.name=#{name}) z,
+        (select a.detNum-b.detNum as sumYes from(select detNum ,name from parser_count_statistics_save where TO_DAYS(createTime)=TO_DAYS(NOW())-1) a,
+        (select detNum ,name from parser_count_statistics ) b where a.name=b.name and a.name=#{name}) y,
+        (select a.detNum-b.detNum as sumAgo from(select detNum ,name from parser_count_statistics_save where TO_DAYS(createTime)=TO_DAYS(NOW())-2) a,
+        (select detNum ,name from parser_count_statistics ) b where a.name=b.name and a.name=#{name}) x,
+        (select a.detNum-b.detNum as sumAgo1 from(select detNum ,name from parser_count_statistics_save where TO_DAYS(createTime)=TO_DAYS(NOW())-3) a,
+        (select detNum ,name from parser_count_statistics ) b where a.name=b.name and a.name=#{name}) v,
+        (select a.detNum-b.detNum as sumAgo2 from(select detNum ,name from parser_count_statistics_save where TO_DAYS(createTime)=TO_DAYS(NOW())-4) a,
+        (select detNum ,name from parser_count_statistics ) b where a.name=b.name and a.name=#{name}) u limit 0,1
+    </select>
+</mapper>

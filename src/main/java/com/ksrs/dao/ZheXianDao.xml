@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.ksrs.dao.ZheXianDao">
+    <select id="getdata" resultType="com.ksrs.entity.ZheXian">
+
+
+        select * from(SELECT sum(incrementList) as now0 FROM `crawlIncrement` where TO_DAYS(createTime) = TO_DAYS(now()) and data_state=${1} ) as a
+
+        ,
+        (SELECT sum(incrementList)as now1 FROM `crawlIncrement` where TO_DAYS(createTime) = TO_DAYS(now())-1 and data_state=${1}) as b,
+        (SELECT sum(incrementList)as now2 FROM `crawlIncrement` where TO_DAYS(createTime) = TO_DAYS(now())-2 and data_state=${1}) as c,
+        (SELECT sum(incrementList)as now3 FROM `crawlIncrement` where TO_DAYS(createTime) = TO_DAYS(now())-3 and data_state=${1}) as d,
+        (SELECT sum(incrementList)as now4 FROM `crawlIncrement` where TO_DAYS(createTime) = TO_DAYS(now())-4 and data_state=${1}) as e,
+        (SELECT sum(incrementList)as now5 FROM `crawlIncrement` where TO_DAYS(createTime) = TO_DAYS(now())-5 and data_state=${1}) as e1,
+        (SELECT sum(incrementList)as now6 FROM `crawlIncrement` where TO_DAYS(createTime) = TO_DAYS(now())-6 and data_state=${1}) as e2,
+        (SELECT sum(incrementDetail)as ind1 FROM `crawlIncrement` where TO_DAYS(createTime) = TO_DAYS(now()) and data_state=${1}) as f,
+        (SELECT sum(incrementDetail)as ind2 FROM `crawlIncrement` where TO_DAYS(createTime) = TO_DAYS(now())-1 and data_state=${1}) as g,
+        (SELECT sum(incrementDetail)as ind3 FROM `crawlIncrement` where TO_DAYS(createTime) = TO_DAYS(now())-2 and data_state=${1}) as h,
+        (SELECT sum(incrementDetail)as ind4 FROM `crawlIncrement` where TO_DAYS(createTime) = TO_DAYS(now())-3 and data_state=${1}) as i,
+        (SELECT sum(incrementDetail)as ind5 FROM `crawlIncrement` where TO_DAYS(createTime) = TO_DAYS(now())-4 and data_state=${1}) as j,
+        (SELECT sum(incrementDetail)as ind6 FROM `crawlIncrement` where TO_DAYS(createTime) = TO_DAYS(now())-5 and data_state=${1}) as j1,
+        (SELECT sum(incrementDetail)as ind7 FROM `crawlIncrement` where TO_DAYS(createTime) = TO_DAYS(now())-6 and data_state=${1}) as j2,
+        (SELECT sum(updateListNumber)as upd1 FROM `crawlIncrement` where TO_DAYS(createTime) = TO_DAYS(now()) and data_state=${1}) as k,
+        (SELECT sum(updateListNumber)as upd2  FROM `crawlIncrement` where TO_DAYS(createTime) = TO_DAYS(now())-1 and data_state=${1}) as l,
+        (SELECT sum(updateListNumber)as upd3  FROM `crawlIncrement` where TO_DAYS(createTime) = TO_DAYS(now())-2 and data_state=${1}) as m,
+        (SELECT sum(updateListNumber)as upd4  FROM `crawlIncrement` where TO_DAYS(createTime) = TO_DAYS(now())-3 and data_state=${1}) as n,
+        (SELECT sum(updateListNumber)as upd5  FROM `crawlIncrement` where TO_DAYS(createTime) = TO_DAYS(now())-4 and data_state=${1}) as o,
+        (SELECT sum(updateListNumber)as upd6  FROM `crawlIncrement` where TO_DAYS(createTime) = TO_DAYS(now())-5 and data_state=${1}) as o1,
+        (SELECT sum(updateListNumber)as upd7  FROM `crawlIncrement` where TO_DAYS(createTime) = TO_DAYS(now())-6 and data_state=${1}) as o2
+    </select>
+    <select id="getComDate" resultType="com.ksrs.entity.ZheXian">
+        select * from(SELECT sum(incrementList) as now0 FROM `crawlIncrement` where TO_DAYS(createTime) = TO_DAYS(now()) and data_state=${1} and name=#{name}) as a
+        ,
+        (SELECT sum(incrementList)as now1 FROM `crawlIncrement` where TO_DAYS(createTime) = TO_DAYS(now())-1 and data_state=${1} and name=#{name}) as b,
+        (SELECT sum(incrementList)as now2 FROM `crawlIncrement` where TO_DAYS(createTime) = TO_DAYS(now())-2 and data_state=${1} and name=#{name}) as c,
+        (SELECT sum(incrementList)as now3 FROM `crawlIncrement` where TO_DAYS(createTime) = TO_DAYS(now())-3 and data_state=${1} and name=#{name}) as d,
+        (SELECT sum(incrementList)as now4 FROM `crawlIncrement` where TO_DAYS(createTime) = TO_DAYS(now())-4 and data_state=${1} and name=#{name}) as e,
+        (SELECT sum(incrementList)as now5 FROM `crawlIncrement` where TO_DAYS(createTime) = TO_DAYS(now())-5 and data_state=${1} and name=#{name}) as e1,
+        (SELECT sum(incrementList)as now6 FROM `crawlIncrement` where TO_DAYS(createTime) = TO_DAYS(now())-6 and data_state=${1} and name=#{name}) as e2,
+        (SELECT sum(incrementDetail)as ind1 FROM `crawlIncrement` where TO_DAYS(createTime) = TO_DAYS(now()) and data_state=${1} and name=#{name}) as f,
+        (SELECT sum(incrementDetail)as ind2 FROM `crawlIncrement` where TO_DAYS(createTime) = TO_DAYS(now())-1 and data_state=${1} and name=#{name}) as g,
+        (SELECT sum(incrementDetail)as ind3 FROM `crawlIncrement` where TO_DAYS(createTime) = TO_DAYS(now())-2 and data_state=${1} and name=#{name}) as h,
+        (SELECT sum(incrementDetail)as ind4 FROM `crawlIncrement` where TO_DAYS(createTime) = TO_DAYS(now())-3 and data_state=${1} and name=#{name}) as i,
+        (SELECT sum(incrementDetail)as ind5 FROM `crawlIncrement` where TO_DAYS(createTime) = TO_DAYS(now())-4 and data_state=${1} and name=#{name}) as j,
+        (SELECT sum(incrementDetail)as ind6 FROM `crawlIncrement` where TO_DAYS(createTime) = TO_DAYS(now())-5 and data_state=${1} and name=#{name}) as j1,
+        (SELECT sum(incrementDetail)as ind7 FROM `crawlIncrement` where TO_DAYS(createTime) = TO_DAYS(now())-6 and data_state=${1} and name=#{name}) as j2,
+        (SELECT sum(updateListNumber)as upd1 FROM `crawlIncrement` where TO_DAYS(createTime) = TO_DAYS(now()) and data_state=${1} and name=#{name}) as k,
+        (SELECT sum(updateListNumber)as upd2  FROM `crawlIncrement` where TO_DAYS(createTime) = TO_DAYS(now())-1 and data_state=${1} and name=#{name}) as l,
+        (SELECT sum(updateListNumber)as upd3  FROM `crawlIncrement` where TO_DAYS(createTime) = TO_DAYS(now())-2 and data_state=${1} and name=#{name}) as m,
+        (SELECT sum(updateListNumber)as upd4  FROM `crawlIncrement` where TO_DAYS(createTime) = TO_DAYS(now())-3 and data_state=${1} and name=#{name}) as n,
+        (SELECT sum(updateListNumber)as upd5  FROM `crawlIncrement` where TO_DAYS(createTime) = TO_DAYS(now())-4 and data_state=${1} and name=#{name}) as o,
+        (SELECT sum(updateListNumber)as upd6  FROM `crawlIncrement` where TO_DAYS(createTime) = TO_DAYS(now())-5 and data_state=${1} and name=#{name}) as o1,
+        (SELECT sum(updateListNumber)as upd7  FROM `crawlIncrement` where TO_DAYS(createTime) = TO_DAYS(now())-6 and data_state=${1} and name=#{name}) as o2
+    </select>
+    <select id="getsumdata" resultType="com.ksrs.entity.LinGan">
+        select sum(incrementList)+sum(incrementDetail)  as icl,sum(updateListNumber) as icln,createTime from crawlIncrement where TO_DAYS(createTime) BETWEEN TO_DAYS(#{starDate}) and TO_DAYS(#{endDate}) and data_state=1 group by createTime
+    </select>
+</mapper>

@@ -1,0 +1,427 @@
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="utf-8">
+        <title>统计指标</title>
+        <link rel="stylesheet" href="/layui/css/layui.css" media="all">
+        <script src="/layui/jquery.min.js"></script>
+
+    </head>
+<body>
+<div class="layui-form-pane" style="margin-top: 15px;">
+    <div class="layui-form-item">
+        <label class="layui-form-label">日期选择</label>
+        <!--<div class="layui-input-inline">
+            <input class="layui-input laydate-icon" placeholder="起始日期" id="stardate">
+        </div>-->
+        <div class="layui-input-inline">
+            <input class="layui-input laydate-icon" placeholder="选择日期"  id="endDate">
+
+        </div>
+        <div class="layui-input-inline">
+          <button class="layui-btn" id="button1">点击下载</button>
+        </div>
+    </div>
+    </div>
+
+<table class="layui-table"  lay-data="{height:'full-10',url:'/gszl/getAll.action', page:false,limit:32,limits:[15,32,60,90],id:'test'}" lay-filter="test" id="test1">
+    <thead>
+    <tr>
+        <th lay-data="{field:'province', width:100,fixed:'left'}">省份</th>
+        <th lay-data="{field:'have_webtype',event:'have_webtype', width:130}">有网络推广标签</th>
+        <th lay-data="{field:'have_baidu', event:'have_baidu',width:177, sort: true}">百度客户标签</th>
+        <th lay-data="{field:'have_58', event:'have_58',width:150, sort: true}">58客户标签</th>
+        <th lay-data="{field:'have_gj', event:'have_gj',width:80, sort: true}">赶集客户标签</th>
+        <th lay-data="{field:'have_baixin', event:'have_baixin',width:80, sort: true}">百姓客户标签</th>
+        <th lay-data="{field:'have_lx',event:'cnmb', width:120, sort: true}">有联系方式</th>
+        <th lay-data="{field:'have_gssj',event:'have_gssj', width:130,sort: true}">工商手机</th>
+        <th lay-data="{field:'have_gsgh',event:'have_gsgh', width:100, sort: true}">工商固话</th>
+        <th lay-data="{field:'have_zpsj',event:'have_zpsj', width:100, sort: true}">招聘手机</th>
+        <th lay-data="{field:'have_zpgh',event:'have_zpgh', width:100, sort: true}">招聘固话</th>
+        <th lay-data="{field:'have_sqsj',event:'have_sqsj', width:100, sort: true}">商情手机</th>
+        <th lay-data="{field:'have_sqgh',event:'have_sqgh', width:100, sort: true}">商情固话</th>
+        <th lay-data="{field:'have_zsjmsj',event:'have_zsjmsj', width:100, sort: true}">招商加盟手机</th>
+        <th lay-data="{field:'have_zsjmgh',event:'have_zsjmgh', width:100, sort: true}">招商加盟固话</th>
+        <th lay-data="{field:'have_qtsj', event:'have_qtsj',width:100, sort: true}">其它手机</th>
+        <th lay-data="{field:'have_qtgh',event:'have_qtgh', width:100, sort: true}">其它固话</th>
+        <th lay-data="{field:'have_email', event:'have_email',width:100, sort: true}">有邮箱</th>
+        <th lay-data="{field:'have_web', event:'have_web',width:100, sort: true}">有网站</th>
+        <th lay-data="{field:'have_zpxx',event:'have_zpxx', width:100, sort: true}">有三个月招聘信息</th>
+        <th lay-data="{field:'have_zczb',event:'have_zczb', width:100, sort: true}">有注册资本</th>
+        <th lay-data="{field:'have_zch',event:'have_zch', width:100, sort: true}">有注册号</th>
+        <th lay-data="{field:'have_jyfw',event:'have_jyfw', width:100, sort: true}">有经营范围</th>
+        <th lay-data="{field:'have_zcdz',event:'have_zcdz', width:100, sort: true}">有注册地</th>
+        <th lay-data="{field:'have_fr',event:'have_fr', width:100, sort: true}">有法人</th>
+        <th lay-data="{field:'have_ygs',event:'have_ygs', width:100, sort: true}">有员工数</th>
+        <th lay-data="{field:'have_rzlc',event:'have_rzlc', width:100, sort: true}">有融资轮次</th>
+        <th lay-data="{field:'have_sjwzjj',event:'have_sjwzjj', width:100, sort: true}">数据完整(交集)</th>
+        <th lay-data="{field:'have_sjwzbj',event:'have_sjwzbj', width:100, sort: true}">数据完整(并集)</th>
+        <th lay-data="{field:'countTime', width:100, sort: true}">统计时间</th>
+    </tr>
+    </thead>
+</table>
+
+<script src="/layui/layui.js"></script>
+<script type="text/javascript" src="layui/layui.all.js"></script>
+<script>
+
+
+    var endDate="";
+
+    layui.use('laydate', function(){
+        var laydate = layui.laydate;
+
+        //执行一个laydate实例
+        laydate.render({
+            elem: '#endDate', //指定元素
+            done:function(value){
+                endDate=value;
+                table.render({
+                    elem:'#test1',
+                    url:'/gszl/getAll.action?endDate='+endDate,
+                    height:'full-10',
+                    cols:[[
+                        {field:'province', width:100,title:'省份',fixed:true},{field:'have_webtype',event:'have_webtype', width:130,title:'有网络推广标签'},
+                        {field:'have_baidu',event:'have_baidu', width:177, sort: true,title:'百度客户标签'},
+                        {field:'have_58',event:'have_58', width:150, sort: true,title:'58客户标签'},
+                        {field:'have_gj',event:'have_gj', width:80, sort: true,title:'赶集客户标签'},
+                        {field:'have_baixin',event:'have_baixin', width:80, sort: true,title:'百姓客户标签'},
+                        {field:'have_lx', event:'have_lx',width:120, sort: true,title:'有联系方式'},
+                        {field:'have_gssj',event:'have_gssj', width:130,sort: true,title:'工商手机'},
+                        {field:'have_gsgh', event:'have_gsgh',width:100, sort: true,title:'工商固话'},
+                        {field:'have_zpsj',event:'have_zpsj', width:100, sort: true,title:'招聘手机'} ,
+                        {field:'have_zpgh',event:'have_zpgh', width:100, sort: true,title:'招聘固话'},
+                        {field:'have_sqsj',event:'have_sqsj', width:100, sort: true,title:'商情手机'} ,
+                        {field:'have_sqgh',event:'have_sqgh', width:100, sort: true,title:'商情固话'},
+                        {field:'have_zsjmsj',event:'have_zsjmsj', width:100, sort: true,title:'招商加盟手机'} ,
+                        {field:'have_zsjmgh', event:'have_zsjmgh',width:100, sort: true,title:'招商加盟固话'},
+                        {field:'have_qtsj',event:'have_qtsj', width:100, sort: true,title:'其它手机'} ,
+                        {field:'have_qtgh',event:'have_qtgh', width:100, sort: true,title:'其它固话'},
+                        {field:'have_email',event:'have_email', width:100, sort: true,title:'有邮箱'},
+                        {field:'have_web', event:'have_web',width:100, sort: true,title:'有网站'},
+                        {field:'have_zpxx',event:'have_zpxx', width:100, sort: true,title:'有三个月招聘信息'},
+                        {field:'have_zczb',event:'have_zczb', width:70, sort: true,title:'有注册资本'},
+                        {field:'have_zch',event:'have_zch', width:70, sort: true,title:'有注册号'},
+                        {field:'have_jyfw', event:'have_jyfw',width:70, sort: true,title:'有经营范围'},
+                        {field:'have_zcdz', event:'have_zcdz',width:70, sort: true,title:'有注册地'},
+                        {field:'have_fr',event:'have_fr', width:70, sort: true,title:'有法人'},
+                        {field:'have_ygs',event:'have_ygs', width:70, sort: true,title:'有员工数'},
+                        {field:'have_rzlc',event:'have_rzlc', width:100, sort: true,title:'有融资轮次'},
+                        {field:'have_sjwzjj',event:'have_sjwzjj', width:100, sort: true,title:'数据完整(交集)'},
+                        {field:'have_sjwzbj',event:'have_sjwzbj', width:100, sort: true,title:'数据完整(并集)'},
+                        {field:'countTime', event:'countTime',width:100, sort: true,title:'统计时间'}
+                    ]],
+                    page:false,
+                    limit:32,
+                    limits:[15,32,60,80]
+                });
+            }
+        });
+    });
+    $('#button1').click(function(){
+        var url='';
+        if(endDate==null||endDate===''||endDate==='undefined'){
+            url='/gszl/getAll.action?dowload=dowload';
+
+        }else{
+            url='/gszl/getAll.action?dowload=dowload&endDate='+endDate;
+        }
+
+        window.location.href=url;
+    })
+
+    var table;
+    layui.use('table', function(){
+        table = layui.table;
+        table.on('tool(test)',function(obj){
+            if('have_baixin'===obj.event){
+               /* layer.prompt({
+                    formType: 2
+                    ,title: '详细注释'
+                    ,value: '这是KSRS库内线索总量中有百姓标签的量'
+                })*/
+                layer.tips('这是KSRS库内线索总量中有百姓标签的量', '.layui-table-cell.laytable-cell-1-have_baixin', {
+                    tips: [1, '#0FA6D8'] ,//还可配置颜色
+                    offset:'rb'
+                });
+            }
+            else if('have_baidu'===obj.event){
+               /* layer.prompt({
+                    formType: 2
+                    ,title: '详细注释'
+                    ,value: '这是KSRS库内线索总量中有百度标签的量'
+                })*/
+                layer.tips('这是KSRS库内线索总量中有百度标签的量', '.layui-table-cell.laytable-cell-1-have_baidu', {
+                    tips: [1, '#0FA6D8'] ,//还可配置颜色
+                    offset:'rb'
+                });
+            } else if('have_webtype'===obj.event){
+               /* layer.prompt({
+                    formType: 2
+                    ,title: '详细注释'
+                    ,value: '这是KSRS库内线索总量中有网络标签(包含百度，58，赶集，百信)的量'
+                })*/
+                layer.tips('这是KSRS库内线索总量中有网络标签(包含百度，58，赶集，百信)的量', '.layui-table-cell.laytable-cell-1-have_webtype', {
+                    tips: [1, '#0FA6D8'] ,//还可配置颜色
+
+                });
+            }else if('have_58'===obj.event){
+                /*layer.prompt({
+                    formType: 2
+                    ,title: '详细注释'
+                    ,value: '这是KSRS库内线索总量中有58标签的量'
+                })*/
+                layer.tips('这是KSRS库内线索总量中有58标签的量', '.layui-table-cell.laytable-cell-1-have_58', {
+                    tips: [1, '#0FA6D8'] ,//还可配置颜色
+
+                });
+            }else if('have_gj'===obj.event){
+                /*layer.prompt({
+                    formType: 2
+                    ,title: '详细注释'
+                    ,value: '这是KSRS库内线索总量中有赶集标签的量'
+
+                })*/
+                layer.tips('这是KSRS库内线索总量中有赶集标签的量', '.layui-table-cell.laytable-cell-1-have_gj', {
+                    tips: [1, '#0FA6D8'] ,//还可配置颜色
+
+                });
+            }else if('cnmb'===obj.event){
+                /*layer.prompt({
+                    formType: 2
+                    ,title: '详细注释'
+                    ,value: '这是KSRS库内线索总量中有联系方式的量(base+招聘+商情+招商加盟+其它)有其一)'
+                })*/
+                layer.tips('这是KSRS库内线索总量中有联系方式的量(base+招聘+商情+招商加盟+其它)有其一)', '.layui-table-cell.laytable-cell-1-have_lx', {
+                    tips: [1, '#0FA6D8'] ,//还可配置颜色
+
+                });
+            }else if('have_gssj'===obj.event){
+                /*layer.prompt({
+                    formType: 2
+                    ,title: '详细注释'
+                    ,value: '这是KSRS库内线索总量中有工商手机(base表中有手机)的量'
+                })*/
+                layer.tips('这是KSRS库内线索总量中有工商手机(base表中有手机)的量', '.layui-table-cell.laytable-cell-1-have_gssj', {
+                    tips: [1, '#0FA6D8'] ,//还可配置颜色
+
+                });
+            }else if('have_gsgh'===obj.event){
+               /* layer.prompt({
+                    formType: 2
+                    ,title: '详细注释'
+                    ,value: '这是KSRS库内线索总量中有工商固话(base表中有固话)的量'
+                })*/
+                layer.tips('这是KSRS库内线索总量中有工商固话(base表中有固话)的量', '.layui-table-cell.laytable-cell-1-have_gsgh', {
+                    tips: [1, '#0FA6D8'] ,//还可配置颜色
+
+                });
+            }else if('have_zpsj'===obj.event){
+                /*layer.prompt({
+                    formType: 2
+                    ,title: '详细注释'
+                    ,value: '这是KSRS库内线索总量中有招聘手机的量'
+                })*/
+                layer.tips('这是KSRS库内线索总量中有招聘手机的量', '.layui-table-cell.laytable-cell-1-have_zpsj', {
+                    tips: [1, '#0FA6D8'] ,//还可配置颜色
+
+                });
+            }else if('have_zpgh'===obj.event){
+                /*layer.prompt({
+                    formType: 2
+                    ,title: '详细注释'
+                    ,value: '这是KSRS库内线索总量中有招聘固话的量'
+                })*/
+                layer.tips('这是KSRS库内线索总量中有招聘固话的量', '.layui-table-cell.laytable-cell-1-have_zpgh', {
+                    tips: [1, '#0FA6D8'] ,//还可配置颜色
+
+                });
+            }
+            else if('have_sqgh'===obj.event){
+               /* layer.prompt({
+                    formType: 2
+                    ,title: '详细注释'
+                    ,value: '这是KSRS库内线索总量中有商情固话的量'
+                })*/
+                layer.tips('这是KSRS库内线索总量中有商情固话的量', '.layui-table-cell.laytable-cell-1-have_sqgh', {
+                    tips: [1, '#0FA6D8'] ,//还可配置颜色
+
+                });
+            }else if('have_sqsj'===obj.event){
+               /* layer.prompt({
+                    formType: 2
+                    ,title: '详细注释'
+                    ,value: '这是KSRS库内线索总量中有商情手机的量'
+                })*/
+                layer.tips('这是KSRS库内线索总量中有商情手机的量', '.layui-table-cell.laytable-cell-1-have_sqsj', {
+                    tips: [1, '#0FA6D8'] ,//还可配置颜色
+
+                });
+            }else if('have_zsjmsj'===obj.event){
+               /* layer.prompt({
+                    formType: 2
+                    ,title: '详细注释'
+                    ,value: '这是KSRS库内线索总量中有招商加盟手机的量'
+                })*/
+                layer.tips('这是KSRS库内线索总量中有招商加盟手机的量', '.layui-table-cell.laytable-cell-1-have_zsjmsj', {
+                    tips: [1, '#0FA6D8'] ,//还可配置颜色
+
+                });
+            }else if('have_zsjmgh'===obj.event){
+               /* layer.prompt({
+                    formType: 2
+                    ,title: '详细注释'
+                    ,value: '这是KSRS库内线索总量中有招商加盟固话的量'
+                })*/
+                layer.tips('这是KSRS库内线索总量中有招商加盟固话的量', '.layui-table-cell.laytable-cell-1-have_zsjmgh', {
+                    tips: [1, '#0FA6D8'] ,//还可配置颜色
+
+                });
+            }else if('have_qtsj'===obj.event){
+               /* layer.prompt({
+                    formType: 2
+                    ,title: '详细注释'
+                    ,value: '这是KSRS库内线索总量中有其它(投资界、ICP等)手机的量'
+                })*/
+                layer.tips('这是KSRS库内线索总量中有其它(投资界、ICP等)手机的量', '.layui-table-cell.laytable-cell-1-have_qtsj', {
+                    tips: [1, '#0FA6D8'] ,//还可配置颜色
+
+                });
+            }else if('have_qtgh'===obj.event){
+               /* layer.prompt({
+                    formType: 2
+                    ,title: '详细注释'
+                    ,value: '这是KSRS库内线索总量中有其它(投资界、ICP等)固话的量'
+                })*/
+                layer.tips('这是KSRS库内线索总量中有其它(投资界、ICP等)固话的量', '.layui-table-cell.laytable-cell-1-have_qtgh', {
+                    tips: [1, '#0FA6D8'] ,//还可配置颜色
+
+                });
+            }else if('have_email'===obj.event){
+                /*layer.prompt({
+                    formType: 2
+                    ,title: '详细注释'
+                    ,value: '这是KSRS库内线索总量中有邮箱(base表中邮箱)的量'
+                })*/
+                layer.tips('这是KSRS库内线索总量中有邮箱(base表中邮箱)的量', '.layui-table-cell.laytable-cell-1-have_email', {
+                    tips: [1, '#0FA6D8'] ,//还可配置颜色
+
+                });
+            }else if('have_web'===obj.event){
+                /*layer.prompt({
+                    formType: 2
+                    ,title: '详细注释'
+                    ,value: '这是KSRS库内线索总量中有网站(base表中网站)的量'
+                })*/
+                layer.tips('这是KSRS库内线索总量中有网站(base表中网站)的量', '.layui-table-cell.laytable-cell-1-have_web', {
+                    tips: [1, '#0FA6D8'] ,//还可配置颜色
+
+                });
+            }else if('have_zpxx'===obj.event){
+               /* layer.prompt({
+                    formType: 2
+                    ,title: '详细注释'
+                    ,value: '这是KSRS库内线索总量中有招聘信息的量'
+                })*/
+                layer.tips('这是KSRS库内线索总量中有招聘信息的量', '.layui-table-cell.laytable-cell-1-have_zpxx', {
+                    tips: [1, '#0FA6D8'] ,//还可配置颜色
+
+                });
+            }else if('have_zczb'===obj.event){
+                /*layer.prompt({
+                    formType: 2
+                    ,title: '详细注释'
+                    ,value: '这是KSRS库内线索总量中有注册资本的量'
+                })*/
+                layer.tips('这是KSRS库内线索总量中有注册资本的量', '.layui-table-cell.laytable-cell-1-have_zczb', {
+                    tips: [1, '#0FA6D8'] ,//还可配置颜色
+
+                });
+            }else if('have_zch'===obj.event){
+                /*layer.prompt({
+                    formType: 2
+                    ,title: '详细注释'
+                    ,value: '这是KSRS库内线索总量中有注册号的量'
+                })*/
+                layer.tips('这是KSRS库内线索总量中有注册号的量', '.layui-table-cell.laytable-cell-1-have_zch', {
+                    tips: [1, '#0FA6D8'] ,//还可配置颜色
+
+                });
+            }else if('have_jyfw'===obj.event){
+               /* layer.prompt({
+                    formType: 2
+                    ,title: '详细注释'
+                    ,value: '这是KSRS库内线索总量中有经营范围的量'
+                })*/
+                layer.tips('这是KSRS库内线索总量中有经营范围的量', '.layui-table-cell.laytable-cell-1-have_jyfw', {
+                    tips: [1, '#0FA6D8'] ,//还可配置颜色
+
+                });
+            }else if('have_zcdz'===obj.event){
+               /* layer.prompt({
+                    formType: 2
+                    ,title: '详细注释'
+                    ,value: '这是KSRS库内线索总量中有注册地址的量'
+                })*/
+                layer.tips('这是KSRS库内线索总量中有注册地址的量', '.layui-table-cell.laytable-cell-1-have_zcdz', {
+                    tips: [1, '#0FA6D8'] ,//还可配置颜色
+
+                });
+            }else if('have_fr'===obj.event){
+               /* layer.prompt({
+                    formType: 2
+                    ,title: '详细注释'
+                    ,value: '这是KSRS库内线索总量中有法人的量'
+                })*/
+                layer.tips('这是KSRS库内线索总量中有法人的量', '.layui-table-cell.laytable-cell-1-have_fr', {
+                    tips: [1, '#0FA6D8'] ,//还可配置颜色
+
+                });
+            }else if('have_ygs'===obj.event){
+               /* layer.prompt({
+                    formType: 2
+                    ,title: '详细注释'
+                    ,value: '这是KSRS库内线索总量中有员工数的量'
+                })*/
+                layer.tips('这是KSRS库内线索总量中有员工数的量', '.layui-table-cell.laytable-cell-1-have_ygs', {
+                    tips: [1, '#0FA6D8'] ,//还可配置颜色
+
+                });
+            }else if('have_rzlc'===obj.event){
+               /* layer.prompt({
+                    formType: 2
+                    ,title: '详细注释'
+                    ,value: '这是KSRS库内线索总量中有融资轮次的量'
+                })*/
+                layer.tips('这是KSRS库内线索总量中有融资轮次的量', '.layui-table-cell.laytable-cell-1-have_rzlc', {
+                    tips: [1, '#0FA6D8'] ,//还可配置颜色
+
+                });
+            }else if('have_sjwzjj'===obj.event){
+                /*layer.prompt({
+                    formType: 2
+                    ,title: '详细注释'
+                    ,value: '这是KSRS库内线索总量中有数据完整交集(即电话（Base＋招聘）&经营范围&（法人或招聘联系人）都不为空)的量'
+                })*/
+                layer.tips('这是KSRS库内线索总量中有数据完整交集(即电话（Base＋招聘）&经营范围&（法人或招聘联系人）都不为空)的量', '.layui-table-cell.laytable-cell-1-have_sjwzjj', {
+                    tips: [1, '#0FA6D8'] ,//还可配置颜色
+
+                });
+            }else if('have_sjwzbj'===obj.event){
+                /*layer.prompt({
+                 formType: 2
+                 ,title: '详细注释'
+                 ,value: '这是KSRS库内线索总量中有数据完整并集(即电话（Base＋招聘）or经营范围or（法人或招聘联系人）有一个即可)的量'
+                 })*/
+                layer.tips('这是KSRS库内线索总量中有数据完整并集(即电话（Base＋招聘）or经营范围or（法人或招聘联系人）有一个即可)的量', '.layui-table-cell.laytable-cell-1-have_sjwzbj', {
+                    tips: [1, '#0FA6D8'] ,//还可配置颜色
+
+                });
+            }
+        })
+    });
+
+
+</script>
+</body>
+</html>

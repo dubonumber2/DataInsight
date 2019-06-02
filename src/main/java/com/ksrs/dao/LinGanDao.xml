@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "mybatis-3-mapper.dtd">
+        <mapper namespace="com.ksrs.dao.LinGanDao">
+    <select id="getByDate" resultType="com.ksrs.entity.LinGan">
+        select sum(incrementList) as icl,sum(incrementDetail) icd,sum(updateListNumber) as icln,createTime from crawlIncrement where TO_DAYS(createTime) BETWEEN TO_DAYS(#{starDate}) and TO_DAYS(#{endDate}) and data_state=${1}  group by createTime
+    </select>
+    <select id="getByDateCom" resultType="com.ksrs.entity.LinGan">
+        select sum(incrementList) as icl,sum(incrementDetail) icd,sum(updateListNumber) as icln,createTime from crawlIncrement where TO_DAYS(createTime) BETWEEN TO_DAYS(#{starDate}) and TO_DAYS(#{endDate}) and data_state=${1} and name=#{name} group by createTime
+    </select>
+    <select id="getData" resultType="com.ksrs.entity.LinGan">
+        select sum(incrementList) as icl,sum(incrementDetail) icd,sum(updateListNumber) as icln,createTime from crawlIncrement where TO_DAYS(createTime) BETWEEN TO_DAYS(now())-6 and TO_DAYS(now()) and data_state=${1}  group by createTime
+    </select>
+    <select id="getOpenData" resultType="com.ksrs.entity.LinGan">
+        SELECT sum(request) as icl,"countTime" as createTime from statistics_openfalcon where "countTime" BETWEEN now()-INTERVAL '7d' and now()-INTERVAL '1d' group by "countTime" order by "countTime"
+    </select>
+    <select id="getOpenDataByDate" resultType="com.ksrs.entity.LinGan">
+        SELECT sum(request) as icl,"countTime" as createTime from statistics_openfalcon where "countTime" BETWEEN to_date(#{startDate},'yyyy-MM-dd') and to_date(#{endDate},'yyyy-MM-dd') group by "countTime" order by "countTime"
+    </select>
+    <select id="getReqData" resultType="com.ksrs.entity.LinGan">
+        SELECT sum(reqsuccess) as icd,"countTime" as createTime from statistics_reqsuccess where "countTime" BETWEEN now()-INTERVAL '7d' and now()-INTERVAL '1d' group by "countTime" order by "countTime"
+    </select>
+    <select id="getReqDataByDate" resultType="com.ksrs.entity.LinGan">
+        SELECT sum(reqsuccess) as icd,"countTime" as createTime from statistics_reqsuccess where "countTime" BETWEEN to_date(#{startDate},'yyyy-MM-dd') and to_date(#{endDate},'yyyy-MM-dd') group by "countTime" order by "countTime"
+    </select>
+    <select id="getListData" resultType="com.ksrs.entity.LinGan">
+        SELECT sum(list_page_count)+sum(COALESCE(list_update_count,0))  as icl,"countTime" as createTime FROM "public"."statistics_effective" where "countTime" BETWEEN now()-INTERVAL '8d' and now()-interval '1d' group by "countTime" order by "countTime";
+    </select>
+    <select id="getDetailData" resultType="com.ksrs.entity.LinGan">
+        SELECT sum(detail_page_count) as icl,"countTime" as createTime FROM "public"."statistics_effective" where "countTime" BETWEEN now()-INTERVAL '8d' and now()-interval '1d' group by "countTime" order by "countTime";
+    </select>
+    <select id="getListDataByDate" resultType="com.ksrs.entity.LinGan">
+        SELECT sum(list_page_count)+sum(COALESCE(list_update_count,0))  as icl,"countTime" as createTime FROM "public"."statistics_effective" where "countTime" BETWEEN to_date(#{startDate},'yyyy-MM-dd')  and to_date(#{endDate},'yyyy-MM-dd') group by "countTime" order by "countTime";
+    </select>
+    <select id="getDetailDataByDate" resultType="com.ksrs.entity.LinGan">
+        SELECT sum(detail_page_count) as icl,"countTime" as createTime FROM "public"."statistics_effective" where "countTime" BETWEEN to_date(#{startDate},'yyyy-MM-dd') and to_date(#{endDate},'yyyy-MM-dd') group by "countTime" order by "countTime";
+    </select>
+    <select id="getSumDetailList" resultType="com.ksrs.entity.LinGan">
+        SELECT sum(list_page_count)+sum(COALESCE(list_update_count,0))  as icl,sum(detail_page_count) as icd,"countTime" as createTime FROM "public"."statistics_effective" where "countTime" BETWEEN now()-INTERVAL '8d' and now()-interval '1d' group by "countTime" order by "countTime"
+    </select>
+    <select id="getSumDetailListByDate" resultType="com.ksrs.entity.LinGan">
+        SELECT sum(list_page_count)+sum(COALESCE(list_update_count,0))  as icl,sum(detail_page_count) as icd,"countTime" as createTime FROM "public"."statistics_effective" where "countTime" BETWEEN to_date(#{startDate},'yyyy-MM-dd') and to_date(#{endDate},'yyyy-MM-dd') group by "countTime" order by "countTime"
+    </select>
+
+</mapper>

@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="utf-8">
+        <title>数据1</title>
+        <link rel="stylesheet" href="/layui/css/layui.css" media="all">
+        <script src="/layui/jquery.min.js"></script>
+    </head>
+<body>
+<div class="layui-form-pane" style="margin-top: 15px;">
+    <div class="layui-form-item">
+        <label class="layui-form-label">范围选择</label>
+        <div class="layui-input-inline">
+            <input class="layui-input laydate-icon" placeholder="起始日期" id="stardate">
+        </div>
+        <div class="layui-input-inline">
+            <input class="layui-input laydate-icon" placeholder="截止日期"  id="enddate">
+        </div>
+    </div>
+</div>
+<table id='main' class="layui-table" lay-data="{fixed:true,height:'full-10',url:'/incrmt/getAll.action', page:true,limit:15, limits:[15,30,45,60],id:'test'}" lay-filter="test">
+    <thead>
+    <tr>
+        <th lay-data="{field:'id', width:80,fixed:'left'}">编号</th>
+        <th lay-data="{field:'name', width:120}">网站名称</th>
+        <th lay-data="{field:'incrementList', width:145, sort: true}">列表增量</th>
+        <th lay-data="{field:'incrementDetail', width:145, sort: true}">详情增量</th>
+        <th lay-data="{field:'updateListNumber', width:150, sort: true}">列表更新量</th>
+        <th lay-data="{field:'updateDetailNum', width:150, sort: true}">详情更新量</th>
+        <th lay-data="{field:'createTime', width:250, sort: true}">创建时间</th>
+        <th lay-data="{field:'data_state', width:30}">1</th>
+        <!--<th lay-data="{field:'wealth', width:135, sort: true}">财富</th>-->
+    </tr>
+    </thead>
+</table>
+
+<script src="/layui/layui.js"></script>
+<script type="text/javascript" src="layui/layui.all.js"></script>
+<script>
+    var table;
+    layui.use('table', function(){
+        table = layui.table;
+    });
+
+    var stardate;
+    var enddate;
+    layui.use('laydate', function(){
+        var laydate = layui.laydate;
+
+        //执行一个laydate实例
+        laydate.render({
+            elem: '#stardate', //指定元素
+            done:function(value){
+
+                stardate=value;
+
+            }
+        });
+    });
+    layui.use('laydate', function(){
+        var laydate = layui.laydate;
+
+        //执行一个laydate实例
+        laydate.render({
+            elem: '#enddate', //指定元素
+            done:function(value){
+                enddate=value;
+                table.render({
+                    height:'full-10',
+                    elem:'#main',
+                    url:'/incrmt/getByDate.action?start='+stardate+'&end='+enddate,
+                    cols:[[
+                        {field:'id', width:80,title:'编号',fixed:'left'},{field:'name', width:120,title:'网站名称'},
+                        {field:'incrementList', width:145, sort: true,title:'列表增量'},
+                        {field:'incrementDetail', width:145, sort: true,title:'详情增量'},
+                        {field:'updateListNumber', width:150, sort: true,title:'列表更新量'},
+                        {field:'updateDetailNum', width:150, sort: true,title:'详情更新量'},
+                        {field:'createTime', width:250, sort: true,title:'创建时间'},
+                        {field:'data_state', width:30,title:'1'}
+                    ]],
+                    page:true,
+                    limit:15,
+                    limits:[15,30,60,80]
+                });
+            }
+        });
+    });
+
+
+
+
+
+
+</script>
+</body>
+</html>

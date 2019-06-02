@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>编辑用户</title>
+    <link rel="stylesheet" href="/layui/css/layui.css" media="all">
+    <link rel="stylesheet" href="/css/updateUser.css" media="all" />
+    <script src="/layui/jquery.min.js"></script>
+    <script src="/layui/layui.all.js"></script>
+</head>
+<body>
+<form class="layui-form" lay-filter="test2"> <!-- 提示：如果你不想用form，你可以换成div等任何一个普通元素 -->
+    <div class="layui-form-item">
+        <label class="layui-form-label">用户名</label>
+        <div class="layui-input-block">
+            <input type="text" name="username" id="username" readonly="readonly" lay-verify="required" placeholder="请输入" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">密码</label>
+        <div class="layui-input-block">
+            <input type="text" name="password"  id="password" lay-verify="required" placeholder="请输入" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">邮箱</label>
+        <div class="layui-input-block">
+            <input type="text" name="email" id="email" lay-verify="email" placeholder="请输入" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">真实姓名</label>
+        <div class="layui-input-block">
+            <input type="text" name="realName" id="realName" lay-verify="" placeholder="请输入" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <label class="layui-form-label">选择角色</label>
+    <div class="layui-input-block">
+        <select name="rolename" lay-filter="rolename" id="rolename" lay-search="">
+
+
+        </select>
+    </div>
+    <div class="layui-form-item" >
+        <div class="layui-input-block">
+            <button class="layui-btn" lay-submit lay-filter="*">立即提交</button>
+            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+        </div>
+    </div>
+</form>
+<script>
+
+    var str="";
+    var jsondt;
+    $.ajax({
+        url:'/role/getlist.action',
+        type:'post',
+        dataType:'json',
+        async:false,
+        success:function(data){
+
+            jsondt=data;
+        }
+    });
+    str+='<option id="testt" value="">选择角色</option>'
+    for(var i=0;i<jsondt.length;i++){
+        str+='<option value="'+jsondt[i].rolename+'">'+jsondt[i].rolename+'</option>'
+
+    };
+
+
+
+    document.getElementById("rolename").innerHTML=str;
+    var form=layui.form;
+    var rolename="";
+    var id;
+    form.on('select', function(data) {
+
+        rolename = data.value;
+
+    })
+    form.render('select', 'test2');
+    layui.use(['form','layedit'], function(){
+        var form = layui.form;
+
+
+        form.on('submit(*)', function(data){
+            $.ajax({
+                url:'/user/insertUser.action?type=update&user_id='+user_id,
+                dataType:'text',
+                async:false,
+                type:'post',
+                data:data.field,
+                success:function (data) {
+
+                    if(data==='success'){
+                      layer.alert('编辑成功',{
+                          skin: 'layui-layer-molv' //样式类名
+                          ,closeBtn: 0,
+
+                      },function (index) {
+                          layer.close(index);
+                          var index1 = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+                          parent.layer.close(index1); //再执行关闭
+
+                      });
+                    }else if(data==='no'){
+                        layer.alert('编辑失败，服务器出现异常',{
+                            skin: 'layui-layer-lan' //样式类名
+                            ,closeBtn: 0,
+
+                        });
+                    }
+                }
+
+            });
+            return false;
+        });
+    });
+    var user_id;
+    function test(id,username,password,email,realName,rolename){
+        user_id=id;
+        document.getElementById("username").value=username;
+        document.getElementById("password").value=password;
+        document.getElementById("email").value=email;
+        document.getElementById("realName").value=realName;
+        document.getElementById("testt").value=rolename;
+        document.getElementById("testt").innerHTML=rolename;
+    }
+</script>
+</body>
+</html>

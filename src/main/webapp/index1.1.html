@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="utf-8">
+        <title>数据1</title>
+        <link rel="stylesheet" href="/layui/css/layui.css" media="all">
+
+    </head>
+<body>
+
+<table class="layui-table" lay-data="{fixed:true,height:'full-10', url:'/incrmt/getAll.action', page:true,limit:15, limits:[15,30,45,60],id:'test'}" lay-filter="test">
+    <thead>
+    <tr>
+        <th lay-data="{field:'id', width:80,fixed:'left'}">编号</th>
+        <th lay-data="{field:'name', width:120}">网站名称</th>
+        <th lay-data="{field:'incrementList', width:145, sort: true}">列表增量</th>
+        <th lay-data="{field:'incrementDetail', width:145, sort: true}">详情增量</th>
+        <th lay-data="{field:'updateListNumber', width:150, sort: true}">列表更新量</th>
+        <th lay-data="{field:'updateDetailNum', width:150, sort: true}">详情更新量</th>
+        <th lay-data="{field:'createTime', width:250, sort: true}">创建时间</th>
+        <th lay-data="{field:'data_state', width:30}">1</th>
+        <!--<th lay-data="{field:'wealth', width:135, sort: true}">财富</th>-->
+    </tr>
+    </thead>
+</table>
+
+<script src="/layui/layui.js"></script>
+<script>
+    layui.use('table', function(){
+        var table = layui.table;
+    });
+</script>
+</body>
+</html>

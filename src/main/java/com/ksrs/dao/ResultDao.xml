@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "mybatis-3-mapper.dtd">
+        <mapper namespace="com.ksrs.dao.ResultDao">
+    <select id="getPage" resultType="com.ksrs.entity.Result">
+        select so.id as id,so.area as province,si.national_statistics as nats,
+        si.national_statistics_personic as natsp,si.national_statistics_com as natcs,
+        si.national_statistics_others as natso,so.cue_mining_yields as cumy,
+        so.complete_data as cmpd,so.normal_company as nrcp,so.normal_com_data as nrcd,
+        so.amount_baidu_tags as ambd,so.cell_phone as hpho,so.landline as htel,so.xswjsl as xswjsl,
+        to_char(so.product_coverage*100 , '999.99%')as procov,to_char(so.normal_com_coverage*100,'999.99%') as ncm,
+        to_char(so.com_data_coverage*100,'90.99%') as cdc,to_char(so.baidu_customer_share*100,'90.99%') as bcs,
+        to_char(so.phone_coverage*100,'999.99%') as pc,to_char(so.fixed_coverage*100,'999.99%') as fc,so.create_time as ct from
+        statistics_operation so left join statistics_infro si on so.area=si.area and to_char(to_date(create_time, 'yyyy-MM-dd'),'MM')=to_char("countTime",'MM')
+        where so.create_time=to_char(now()-interval '1d','yyyy-MM-dd')
+        UNION all
+        select  0000 as id,'合计' as provice ,sum(si.national_statistics) as nats,
+        sum(si.national_statistics_personic) as natsp,sum(si.national_statistics_com) as natcs,
+        sum(si.national_statistics_others) as natso,sum(so.cue_mining_yields) as cumy,
+        sum(so.complete_data) as cmpd,sum(so.normal_company) as nrcp,sum(so.normal_com_data) as nrcd,
+        sum(so.amount_baidu_tags) as ambd,sum(so.cell_phone) as hpho,sum(so.landline) as htel,sum(so.xswjsl) as xswjsl,
+        to_char((sum(so.cue_mining_yields) /(sum(si.national_statistics)*10000))*100 , '999.99%')as procov,to_char((sum(so.normal_company)/(sum(si.national_statistics)*10000))*100,'999.99%') as ncm,
+        to_char((sum(so.complete_data)/(sum(si.national_statistics)*10000))*100,'90.99%') as cdc,to_char((sum(so.amount_baidu_tags)/(sum(si.national_statistics)*10000))*100,'90.99%') as bcs,
+        to_char((sum(so.cell_phone)/(sum(si.national_statistics)*10000))*100,'999.99%') as pc,to_char((sum(so.landline)/(sum(si.national_statistics)*10000))*100,'999.99%') as fc, to_char(now()-INTERVAL '1d','yyyy-MM-dd') as ct
+        from
+        statistics_operation so left join statistics_infro si on so.area=si.area and to_char(to_date(create_time, 'yyyy-MM-dd'),'MM')=to_char("countTime",'MM')
+        where so.create_time=to_char(now()-interval '1d','yyyy-MM-dd')
+        limit 1000 offset 0
+    </select>
+    <select id="getTotal" resultType="int">
+        select count(*) from
+        statistics_operation so left join statistics_infro si on so.area=si.area and to_char(to_date(create_time, 'yyyy-MM-dd'),'MM')=to_char("countTime",'MM')  where so.create_time=to_char(now(),'yyyy-MM-dd')
+    </select>
+    <select id="getDataByDate" resultType="com.ksrs.entity.Result">
+        select so.id as id,so.area as province,si.national_statistics as nats,
+        si.national_statistics_personic as natsp,si.national_statistics_com as natcs,
+        si.national_statistics_others as natso,so.cue_mining_yields as cumy,
+        so.complete_data as cmpd,so.normal_company as nrcp,so.normal_com_data as nrcd,
+        so.amount_baidu_tags as ambd,so.cell_phone as hpho,so.landline as htel,so.xswjsl as xswjsl,
+        to_char(so.product_coverage*100 , '999.99%')as procov,to_char(so.normal_com_coverage*100,'999.99%') as ncm,
+        to_char(so.com_data_coverage*100,'90.99%') as cdc,to_char(so.baidu_customer_share*100,'90.99%') as bcs,
+        to_char(so.phone_coverage*100,'999.99%') as pc,to_char(so.fixed_coverage*100,'999.99%') as fc,so.create_time as ct from
+        statistics_operation so left join statistics_infro si on so.area=si.area and to_char(to_date(create_time, 'yyyy-MM-dd'),'MM')=to_char("countTime",'MM')
+        where so.create_time=#{enddate}
+        UNION all
+        select  0000 as id,'合计' as provice ,sum(si.national_statistics) as nats,
+        sum(si.national_statistics_personic) as natsp,sum(si.national_statistics_com) as natcs,
+        sum(si.national_statistics_others) as natso,sum(so.cue_mining_yields) as cumy,
+        sum(so.complete_data) as cmpd,sum(so.normal_company) as nrcp,sum(so.normal_com_data) as nrcd,
+        sum(so.amount_baidu_tags) as ambd,sum(so.cell_phone) as hpho,sum(so.landline) as htel,sum(so.xswjsl) as xswjsl,
+        to_char((sum(so.cue_mining_yields) /(sum(si.national_statistics)*10000))*100 , '999.99%')as procov,to_char((sum(so.normal_company)/(sum(si.national_statistics)*10000))*100,'999.99%') as ncm,
+        to_char((sum(so.complete_data)/(sum(si.national_statistics)*10000))*100,'90.99%') as cdc,to_char((sum(so.amount_baidu_tags)/(sum(si.national_statistics)*10000))*100,'90.99%') as bcs,
+        to_char((sum(so.cell_phone)/(sum(si.national_statistics)*10000))*100,'999.99%') as pc,to_char((sum(so.landline)/(sum(si.national_statistics)*10000))*100,'999.99%') as fc, to_char(now()-INTERVAL '1d','yyyy-MM-dd') as ct
+        from
+        statistics_operation so left join statistics_infro si on so.area=si.area and to_char(to_date(create_time, 'yyyy-MM-dd'),'MM')=to_char("countTime",'MM')
+        where so.create_time=#{enddate}
+
+
+    </select>
+    <select id="getTotalByDate" resultType="int">
+        select count(*) from
+        statistics_operation so left join statistics_infro si on so.area=si.area and to_char(to_date(create_time, 'yyyy-MM-dd'),'MM')=to_char("countTime",'MM') where create_time = #{enddate}
+    </select>
+    <select id="getGongS" resultType="com.ksrs.entity.Result">
+        SELECT so.area as province, si.national_statistics nats,si.national_statistics_personic as natsp,si.national_statistics_com  as natcs,
+        round(cast(so.cue_mining_yields as NUMERIC)/10000,2) as natso,to_char(so.product_coverage*100,'909.99%') as procov,
+        so.cell_phone+so.landline as htel,to_char(round(cast( so.cell_phone+so.landline as NUMERIC)/cast(so.cue_mining_yields as NUMERIC),4)*100,'990.99%') as pc,
+        si.url as fc FROM statistics_infro si LEFT JOIN "public"."statistics_operation"  so on si.area=so.area and to_char(si."countTime",'MM')=to_char(to_date(so.create_time,'yyyy-MM-dd') ,'MM')
+        where so.create_time=to_char(now()-interval '1d', 'yyyy-MM-dd')
+        UNION ALL
+        SELECT '合计' as province, sum(si.national_statistics) nats,sum(si.national_statistics_personic) as natsp,sum(si.national_statistics_com)  as natcs,
+        round(cast(sum(so.cue_mining_yields) as NUMERIC)/10000,2) as natso,to_char(round(cast(sum(so.cue_mining_yields) as NUMERIC)/10000,2)/sum(si.national_statistics)*100,'909.99%') as procov,
+        sum(so.cell_phone+so.landline) as htel,to_char((sum(so.cell_phone+so.landline)/(sum(si.national_statistics)*10000))*100,'990.99%') as pc,
+        '合计' as fc FROM statistics_infro si LEFT JOIN "public"."statistics_operation"  so on si.area=so.area and to_char(si."countTime",'MM')=to_char(to_date(so.create_time,'yyyy-MM-dd') ,'MM')
+        where so.create_time=to_char(now()-interval '1d', 'yyyy-MM-dd') limit #{pagesize} offset #{start}
+    </select>
+    <select id="getGongSByDate" resultType="com.ksrs.entity.Result" parameterType="java.lang.String">
+        SELECT so.area as province, si.national_statistics nats,si.national_statistics_personic as natsp,si.national_statistics_com  as natcs,
+        round(cast(so.cue_mining_yields as NUMERIC)/10000,2) as natso,to_char(so.product_coverage*100,'909.99%') as procov,
+        so.cell_phone+so.landline as htel,to_char(round(cast( so.cell_phone+so.landline as NUMERIC)/cast(so.cue_mining_yields as NUMERIC),4)*100,'990.99%') as pc,
+        si.url as fc FROM statistics_infro si LEFT JOIN "public"."statistics_operation"  so on si.area=so.area and to_char(si."countTime",'MM')=to_char(to_date(so.create_time,'yyyy-MM-dd') ,'MM')
+        where so.create_time=#{enddate}
+        UNION ALL
+        SELECT '合计' as province, sum(si.national_statistics) nats,sum(si.national_statistics_personic) as natsp,sum(si.national_statistics_com)  as natcs,
+        round(cast(sum(so.cue_mining_yields) as NUMERIC)/10000,2) as natso,to_char(round(cast(sum(so.cue_mining_yields) as NUMERIC)/10000,2)/sum(si.national_statistics)*100,'909.99%') as procov,
+        sum(so.cell_phone+so.landline) as htel,to_char((sum(so.cell_phone+so.landline)/(sum(si.national_statistics)*10000))*100,'990.99%') as pc,
+        '合计' as fc FROM statistics_infro si LEFT JOIN "public"."statistics_operation"  so on si.area=so.area and to_char(si."countTime",'MM')=to_char(to_date(so.create_time,'yyyy-MM-dd') ,'MM')
+        where so.create_time=#{enddate}
+    </select>
+</mapper>

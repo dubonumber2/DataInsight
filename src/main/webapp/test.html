@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    // 基于准备好的dom，初始化echarts实例
+    var date;
+    /*var myChart = echarts.init(document.getElementById('main'));
+
+    $.ajax({
+    url:'/sumdata/getdata.action',
+    dataType:'json',
+    async:false,
+    type:'post',
+    success:function (data) {
+    date=data;
+    }
+
+    });
+    /!* //图表显示提示信息
+
+    myChart.showLoading({
+
+    text: "图表数据正在努力加载..."
+
+    });*!/
+
+
+
+    // 指定图表的配置项和数据
+
+
+
+    var option = {
+    title: {
+    text: '增量统计'
+    },
+    tooltip: {},
+    legend: {
+    data:['增量统计']
+    },
+    xAxis: {
+    data: ["列表增量总和","详情增量总和","列表更新量总和","详情更新量总和"]
+    },
+    yAxis: {},
+    series: [{
+    name: '增量统计',
+    type: 'bar',
+    data: [date.sumIncrementList, date.sumIncrementDetail, date.sumUpdateListNumber, date.updateDetailNum]
+    }]
+    };
+
+
+    // 使用刚指定的配置项和数据显示图表。
+    myChart.setOption(option);
+
+</head>
+<body>
+    <p>测试</p>>
+</body>
+</html>

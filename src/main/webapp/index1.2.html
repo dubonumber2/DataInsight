@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="utf-8">
+        <title>数据2</title>
+        <link rel="stylesheet" href="/layui/css/layui.css" media="all">
+
+    </head>
+<body>
+
+<table class="layui-table" lay-data="{height:'full-10',fixed:true, url:'/statis/getAll.action', page:true,limit:15, limits:[15,30,45,60],id:'test'}" lay-filter="test">
+    <thead>
+    <tr>
+        <th lay-data="{field:'id', width:80,fixed:'true'}">编号</th>
+        <th lay-data="{field:'name', width:150}">网站名称</th>
+        <th lay-data="{field:'number', width:150, sort: true}">抓取总量</th>
+        <th lay-data="{field:'detNum', width:150, sort: true}">抓取详情页面总量</th>
+        <th lay-data="{field:'detDate', width:200, sort: true}">抓取详情页面的时间</th>
+        <th lay-data="{field:'analysisNum', width:250, sort: true}">解析详情页面的总量</th>
+        <th lay-data="{field:'analysisDFate', width:250, sort: true}">统计时解析详情页面的最后时间点</th>
+        <th lay-data="{field:'createTime', width:50}">统计的时间点</th>
+        <!--<th lay-data="{field:'wealth', width:135, sort: true}">财富</th>-->
+    </tr>
+    </thead>
+</table>
+
+<script src="/layui/layui.js"></script>
+<script>
+    layui.use('table', function(){
+        var table = layui.table;
+    });
+</script>
+</body>
+</html>

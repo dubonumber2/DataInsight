@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>数据可视化</title>
+    <link rel="stylesheet" href="/layui/css/layui.css">
+      <script src="/layui/jquery.min.js"></script>
+        <style>
+            iframe{
+                height:100%;width:100%;}
+
+
+        </style>
+    </head>
+<body class="layui-layout-body" >
+<div class="layui-layout layui-layout-admin">
+      <div class="layui-header">
+        <div class="layui-logo">DataInsight数据洞察平台</div>
+        <!-- 头部区域（可配合layui已有的水平导航） -->
+        <ul class="layui-nav layui-layout-left">
+          <!--<li class="layui-nav-item"><a href="">控制台</a></li>
+          <li class="layui-nav-item"><a href="">商品管理</a></li>
+          <li class="layui-nav-item"><a href="">用户</a></li>-->
+          <li class="layui-nav-item">
+            <a href="javascript:;">其它系统</a>
+            <dl class="layui-nav-child">
+              <dd><a href="">邮件管理</a></dd>
+              <dd><a href="">消息管理</a></dd>
+              <dd><a href="">授权管理</a></dd>
+           </dl>
+          </li>
+       </ul>
+       <ul class="layui-nav layui-layout-right">
+         <li class="layui-nav-item">
+           <a href="javascript:;" id="msg">
+              <img src="http://t.cn/RCzsdCq" class="layui-nav-img">
+
+           </a>
+           <dl class="layui-nav-child">
+             <dd><a href="">基本资料</a></dd>
+            <dd><a href="">安全设置</a></dd>
+           </dl>
+          </li>
+          <li class="layui-nav-item"><a href="/user/logout.action">退出</a></li>
+        </ul>
+      </div>
+
+      <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll" >
+          <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+          <ul class="layui-nav layui-nav-tree"  lay-filter="sideNav" id="sideNav" >
+           <!-- <li class="layui-nav-item layui-nav-itemed">
+              <a class="" href="javascript:;">数据列表</a>
+              <dl class="layui-nav-child">
+                  <dd><a onclick="addTab(this)" title="jiexi.html" >解析数据列表</a></dd>
+                  <dd><a onclick="addTab(this)" title="detail.html">爬虫抓取列表</a></dd>
+                  <dd><a  onclick="addTab(this)" title="sumdate.html">增量总和统计</a></dd>
+                  <dd><a  onclick="addTab(this)" title="comzhexian.html">抓取数据统计</a></dd>
+                  <dd><a  onclick="addTab(this)" title="comzhexianjx.html">解析数据统计</a></dd>
+                  &lt;!&ndash;<dd><a href="">超链接</a></dd>&ndash;&gt;
+              </dl>
+          </li>
+           < <li class="layui-nav-item">
+              <a href="javascript:;">用户管理</a>
+              <dl class="layui-nav-child">
+                <dd><a onclick="addTab(this)" title="/admin/user.html">用户列表</a></dd>
+                <dd><a onclick="addTab(this)" title="/admin/role.html">角色列表</a></dd>
+                <dd><a href="">超链接</a></dd>
+              </dl>
+            </li>
+            &lt;!&ndash;<li class="layui-nav-item"><a href="">云市场</a></li>
+            <li class="layui-nav-item"><a href="">发布商品</a></li>&ndash;&gt;-->
+          </ul>
+        </div>
+      </div>
+
+      <div class="layui-body" >
+        <!-- 内容主体区域 -->
+
+          <div class="layui-tab fly-tab layui-tab-card" lay-filter="page-tab" lay-allowclose="true"  >
+              <ul id="tabTitle" class="layui-tab-title">
+                  <li lay-id=0 class="layui-this"><label>爬虫抓取统计</label><i class="layui-icon layui-unselect layui-tab-close">ဆ</i></li>
+              </ul>
+              <div  class="layui-tab-content" id="tabContainers">
+                 <div class="layui-tab-item layui-show" >
+                      <iframe src='lingan.html'  ></iframe>
+                  </div>
+              </div>
+
+          </div>
+
+
+</div>
+
+      <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © ksrs.com - 所有
+      </div>
+    </div>
+<script src="/layui/layui.all.js"></script>
+<script src="/js/index.js"></script>
+
+</body>
+</html>

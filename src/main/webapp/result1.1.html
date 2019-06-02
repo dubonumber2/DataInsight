@@ -1,0 +1,128 @@
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="utf-8">
+        <title>统计指标</title>
+        <link rel="stylesheet" href="/layui/css/layui.css" media="all">
+        <script src="/layui/jquery.min.js"></script>
+
+    </head>
+<body>
+<div class="layui-form-pane" style="margin-top: 15px;">
+    <div class="layui-form-item">
+        <label class="layui-form-label">日期选择</label>
+        <!--<div class="layui-input-inline">
+            <input class="layui-input laydate-icon" placeholder="起始日期" id="stardate">
+        </div>-->
+        <div class="layui-input-inline">
+            <input class="layui-input laydate-icon" placeholder="选择日期"  id="enddate">
+        </div>
+        <div class="layui-input-inline">
+            <button class="layui-btn" id="button1">点击下载</button>
+        </div>
+    </div>
+    </div>
+
+<table class="layui-table" lay-data="{height:'full-10',url:'/result/getGongs.action', page:false,limit:32,limits:[32,60,90],id:'test'}" lay-filter="test" id="test1">
+    <thead>
+    <tr>
+        <th lay-data="{field:'province', width:100,fixed:'left'}">省份</th>
+        <th lay-data="{field:'nats', width:130}">国家统计总(万)</th>
+        <th lay-data="{field:'natsp', width:177, sort: true}">国家统计个体工商(万)</th>
+        <th lay-data="{field:'natcs', width:150, sort: true}">国家统计企业(万)</th>
+        <th lay-data="{field:'natso', width:150, sort: true}">KSRS库内统计(万户)</th>
+        <!--<th lay-data="{field:'cumy', width:120, sort: true}">KSRS库内统计(万户)</th>
+        <th lay-data="{field:'cmpd', width:130,sort: true}">完整数据(电话&经营范围&法人或联系人)</th>
+        <th lay-data="{field:'nrcp', width:100, sort: true}">正常公司</th>
+        <th lay-data="{field:'nrcd', width:100, sort: true}">正常且数据完整</th>
+        <th lay-data="{field:'ambd', width:100, sort: true}">有百度标签的公司</th>
+        <th lay-data="{field:'hpho', width:100, sort: true}">有手机</th>-->
+        <th lay-data="{field:'procov', width:100, sort: true}">获取占比</th>
+        <th lay-data="{field:'htel', width:100, sort: true}">KSRS库内有电话数(户)</th>
+
+
+
+        <th lay-data="{field:'pc', width:100, sort: true}">电话数量占比</th>
+        <th lay-data="{field:'fc', width:315, sort: true}">国家统计数据源</th>
+
+        <!--<th lay-data="{field:'wealth', width:135, sort: true}">财富</th>-->
+    </tr>
+    </thead>
+</table>
+
+<script src="/layui/layui.js"></script>
+<script type="text/javascript" src="layui/layui.all.js"></script>
+<script>
+    var table;
+    layui.use('table', function(){
+         table = layui.table;
+    });
+    var table;
+    layui.use('table', function(){
+        table = layui.table;
+    });
+
+    var stardate="";
+    var enddate="";
+    var comname="";
+    layui.use('laydate', function(){
+        var laydate = layui.laydate;
+
+        //执行一个laydate实例
+        laydate.render({
+            elem: '#stardate', //指定元素
+            done:function(value){
+
+                stardate=value;
+
+            }
+        });
+    });
+    layui.use('laydate', function(){
+        var laydate = layui.laydate;
+
+        //执行一个laydate实例
+        laydate.render({
+            elem: '#enddate', //指定元素
+            done:function(value){
+                enddate=value;
+                table.render({
+                    elem:'#test1',
+                    url:'/result/getGongsBydate.action?enddate='+enddate,
+                    height:'full-10',
+                    cols:[[
+                        {field:'province', width:100,title:'省份',fixed:true},{field:'nats', width:130,title:'国家统计总(万)'},
+                        {field:'natsp', width:177, sort: true,title:'国家统计个体工商(万)'},
+                        {field:'natcs', width:150, sort: true,title:'国家统计企业(万)'},
+                        {field:'natso', width:150, sort: true,title:'KSRS库内统计(万户)'},
+                        {field:'htel', width:100, sort: true,title:'KSRS库内有电话数(户)'},
+                        {field:'procov', width:100, sort: true,title:'获取占比'},
+                        {field:'pc', width:100, sort: true,title:'电话数量占比'},
+                        {field:'fc', width:315, sort: true,title:'国家统计数据源'}
+
+
+
+
+                    ]],
+                    page:false,
+                    limit:32,
+                    limits:[32,60,80]
+                });
+            }
+        });
+    });
+    $('#button1').click(function(){
+        var url='';
+        if(enddate==null||enddate===''||enddate==='undefined'){
+            url='/result/getGongs.action?dowload=dowload&limit=40&page=1';
+
+        }else{
+            url='/result/getGongsBydate.action?dowload=dowload&enddate='+enddate;
+        }
+
+        window.location.href=url;
+    })
+
+</script>
+</body>
+</html>

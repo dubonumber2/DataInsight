@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.ksrs.dao.UserDao">
+    <select id="login" resultType="com.ksrs.entity.User">
+        select u.id,u.username,u."password",u.email,u."realName",r.rolename as rolename ,r."id" as role_id  from "public"."user" as u left join "public".role_user as ru on u."id"=ru.user_id left join "public"."role" as r on ru.role_id=r."id" where u.username=#{username} and u."password"=#{password}
+    </select>
+    <select id="getTotal"  resultType="int">
+        select count(*) from "public"."user"
+    </select>
+    <select id="getPage" resultType="com.ksrs.entity.User">
+        select u.id,u.username,u."password",u.email,u."realName",r.rolename as rolename ,r."id" as role_id  from "public"."user" as u left join "public".role_user as ru on u."id"=ru.user_id left join "public"."role" as r on ru.role_id=r."id" limit #{pagesize} OFFSET #{start}
+    </select>
+    <insert id="insertUser" parameterType="com.ksrs.entity.User">
+        insert into "user"("username","password","email","realName") values(#{username},#{password},#{email},#{realName})
+    </insert>
+    <update id="updateUser" parameterType="com.ksrs.entity.User">
+        update "user" set "password"=#{password},"email"=#{email},"realName"=#{realName} where "username"=#{username}
+    </update>
+    <delete id="deleteUser" parameterType="java.lang.Integer">
+        delete from "user" where "id"=${id}
+    </delete>
+</mapper>

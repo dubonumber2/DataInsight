@@ -1,0 +1,249 @@
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="utf-8">
+        <title>统计指标</title>
+        <link rel="stylesheet" href="/layui/css/layui.css" media="all">
+        <script src="/layui/jquery.min.js"></script>
+
+    </head>
+<body>
+<div class="layui-form-pane" style="margin-top: 15px;">
+    <div class="layui-form-item">
+        <label class="layui-form-label">日期选择</label>
+        <!--<div class="layui-input-inline">
+            <input class="layui-input laydate-icon" placeholder="起始日期" id="stardate">
+        </div>-->
+        <div class="layui-input-inline">
+            <input class="layui-input laydate-icon" placeholder="选择日期"  id="enddate">
+
+        </div>
+        <div class="layui-input-inline">
+          <button class="layui-btn" id="button1">点击下载</button>
+        </div>
+    </div>
+    </div>
+
+<table class="layui-table" lay-data="{height:'full-10',url:'/result/getPage.action', page:false,limit:32,limits:[15,32,60,90],id:'test'}" lay-filter="test" id="test1">
+    <thead>
+    <tr>
+        <th lay-data="{field:'province', width:100,fixed:'left'}">省份</th>
+        <th lay-data="{field:'nats',event:'nats', width:130}">国家统计总(万)</th>
+        <th lay-data="{field:'natsp',event:'natsp', width:177, sort: true}">国家统计个体工商(万)</th>
+        <th lay-data="{field:'natcs',event:'natcs', width:150, sort: true}">国家统计企业(万)</th>
+        <th lay-data="{field:'natso',event:'natso', width:80, sort: true}">其它(万)</th>
+        <th lay-data="{field:'cumy', event:'cumy',width:120, sort: true}">库内线索</th>
+        <th lay-data="{field:'xswjsl', event:'xswjsl',width:120, sort: true}">线索挖掘数量</th>
+        <th lay-data="{field:'cmpd',event:'nmpd', width:130,sort: true}">完整数据(电话&经营范围&法人或联系人)</th>
+        <th lay-data="{field:'nrcp',event:'nrcp', width:100, sort: true}">正常公司</th>
+        <th lay-data="{field:'nrcd', event:'nrcd',width:100, sort: true}">正常且数据完整</th>
+        <th lay-data="{field:'ambd', event:'ambd',width:100, sort: true}">有百度标签的公司</th>
+        <th lay-data="{field:'hpho', event:'hpho',width:100, sort: true}">有手机</th>
+        <th lay-data="{field:'htel',event:'htel', width:100, sort: true}">有固话</th>
+        <th lay-data="{field:'procov',event:'procov', width:100, sort: true}">产品覆盖率</th>
+        <th lay-data="{field:'ncm', event:'ncm',width:100, sort: true}">正常公司覆盖率</th>
+        <th lay-data="{field:'cdc', event:'cdc',width:100, sort: true}">公司完整数据覆盖率</th>
+        <th lay-data="{field:'bcs',event:'bcs', width:100, sort: true}">百度客户占比</th>
+        <th lay-data="{field:'pc',event:'pc', width:100, sort: true}">手机覆盖率</th>
+        <th lay-data="{field:'fc',event:'fc', width:100, sort: true}">固话覆盖率</th>
+        <th lay-data="{field:'ct', width:100, sort: true}">统计时间</th>
+        <!--<th lay-data="{field:'wealth', width:135, sort: true}">财富</th>-->
+    </tr>
+    </thead>
+</table>
+
+<script src="/layui/layui.js"></script>
+<script type="text/javascript" src="layui/layui.all.js"></script>
+<script>
+    var stardate="";
+    var enddate="";
+    var comname="";
+    layui.use('laydate', function(){
+        var laydate = layui.laydate;
+
+        //执行一个laydate实例
+        laydate.render({
+            elem: '#stardate', //指定元素
+            done:function(value){
+
+                stardate=value;
+
+            }
+        });
+    });
+    layui.use('laydate', function(){
+        var laydate = layui.laydate;
+
+        //执行一个laydate实例
+        laydate.render({
+            elem: '#enddate', //指定元素
+            done:function(value){
+                enddate=value;
+                table.render({
+                    elem:'#test1',
+                    url:'/result/getByDate.action?enddate='+enddate,
+                    height:'full-10',
+                    cols:[[
+                        {field:'province', width:100,title:'省份',fixed:true},{field:'nats',event:'nats', width:130,title:'国家统计总(万)'},
+                        {field:'natsp',event:'natsp', width:177, sort: true,title:'国家统计个体工商(万)'},
+                        {field:'natcs',event:'natcs', width:150, sort: true,title:'国家统计企业(万)'},
+                        {field:'natso',event:'natso', width:80, sort: true,title:'其它(万)'},
+                        {field:'cumy', event:'cumy',width:120, sort: true,title:'库内线索'},
+                        {field:'xswjsl',event:'xswjsl',   width:120, sort: true,title:'线索挖掘数量'},
+                        {field:'cmpd',event:'nmpd', width:130,sort: true,title:'完整数据(电话&经营范围&法人或联系人)'},
+                        {field:'nrcp',event:'nrcp', width:100, sort: true,title:'正常公司'},
+                        {field:'nrcd',event:'nrcd', width:100, sort: true,title:'正常且数据完整'} ,
+                        {field:'ambd',event:'ambd', width:100, sort: true,title:'有百度标签的量'},
+                        {field:'hpho', event:'hpho', event:'hpho', width:100, sort: true,title:'有手机'},
+                        {field:'htel',event:'htel',  width:100, sort: true,title:'有固话'},
+                        {field:'procov',event:'procov', width:70, sort: true,title:'产品覆盖率'},
+                        {field:'ncm',event:'ncm',  event:'ncm',width:70, sort: true,title:'正常公司覆盖率'},
+                        {field:'cdc',event:'cdc', width:70, sort: true,title:'公司完整数据覆盖率'},
+                        {field:'bcs',event:'bcs', width:70, sort: true,title:'百度客户占比'},
+                        {field:'pc',event:'pc', width:70, sort: true,title:'手机覆盖率'},
+                        {field:'fc',event:'fc',  width:70, sort: true,title:'固话覆盖率'},
+                        {field:'ct', width:100, sort: true,title:'统计时间'}
+
+
+
+
+                    ]],
+                    page:false,
+                    limit:32,
+                    limits:[15,32,60,80]
+                });
+            }
+        });
+    });
+
+    var table;
+
+    layui.use('table', function(){
+        table = layui.table;
+        table.on('tool(test)',function(obj){
+            if('nats'===obj.event){
+                layer.prompt({
+                    formType: 2
+                    ,title: '详细注释'
+                    ,value: '这是全国工商总量(单位是万)'
+                })
+            }else if('natsp'===obj.event){
+                layer.prompt({
+                    formType: 2
+                    ,title: '详细注释'
+                    ,value: '这是全国工商总量中个体工商户的量(单位是万)'
+                })
+            }else if('natcs'===obj.event){
+                layer.prompt({
+                    formType: 2
+                    ,title: '详细注释'
+                    ,value: '这是全国工商总量中企业的量(单位是万)'
+                })
+            }else if('natso'===obj.event){
+                layer.prompt({
+                    formType: 2
+                    ,title: '详细注释'
+                    ,value: '这是全国工商总量中其它的量(单位是万)'
+                })
+            }else if('cumy'===obj.event){
+                layer.prompt({
+                    formType: 2
+                    ,title: '详细注释'
+                    ,value: '这是KSRS库内线索总量'
+                })
+            }else if('nmpd'===obj.event){
+                layer.prompt({
+                    formType: 2
+                    ,title: '详细注释'
+                    ,value: '这是KSRS库内线索总量中有电话(base+招聘+商情+招商加盟+其它)并且有经营范围和有法人或联系人的量'
+                })
+            }else if('nrcp'===obj.event){
+                layer.prompt({
+                    formType: 2
+                    ,title: '详细注释'
+                    ,value: '这是KSRS库内线索总量中经营中的量(即状态正常))'
+                })
+            }else if('nrcd'===obj.event){
+                layer.prompt({
+                    formType: 2
+                    ,title: '详细注释'
+                    ,value: '这是KSRS库内线索总量中经营中并且有完整数据的量'
+                })
+            }else if('ambd'===obj.event){
+                layer.prompt({
+                    formType: 2
+                    ,title: '详细注释'
+                    ,value: '这是KSRS库内线索总量中有百度标签的量'
+                })
+            }else if('hpho'===obj.event){
+                layer.prompt({
+                    formType: 2
+                    ,title: '详细注释'
+                    ,value: '这是KSRS库内线索总量中工商手机的量(即base表中有手机)'
+                })
+            }else if('htel'===obj.event){
+                layer.prompt({
+                    formType: 2
+                    ,title: '详细注释'
+                    ,value: '这是KSRS库内线索总量中有工商固话的量(即base表中有固话)'
+                })
+            }else if('procov'===obj.event){
+                layer.prompt({
+                    formType: 2
+                    ,title: '详细注释'
+                    ,value: '即KSRS库内线索总量/全国工商统计总'
+                })
+            }else if('ncm'===obj.event){
+                layer.prompt({
+                    formType: 2
+                    ,title: '详细注释'
+                    ,value: '即KSRS库内线索总量中状态正常的量/全国工商统计总'
+                })
+            }else if('cdc'===obj.event){
+                layer.prompt({
+                    formType: 2
+                    ,title: '详细注释'
+                    ,value: '即KSRS库内线索总量中有完整数据的量/全国工商统计总'
+                })
+            }else if('bcs'===obj.event){
+                layer.prompt({
+                    formType: 2
+                    ,title: '详细注释'
+                    ,value: '即KSRS库内线索总量中有百度标签的量/全国工商统计总'
+                })
+            }else if('pc'===obj.event){
+                layer.prompt({
+                    formType: 2
+                    ,title: '详细注释'
+                    ,value: '即KSRS库内线索总量中有手机的量/全国工商统计总'
+                })
+            }else if('fc'===obj.event){
+                layer.prompt({
+                    formType: 2
+                    ,title: '详细注释'
+                    ,value: '即KSRS库内线索总量中有固话的量/全国工商统计总'
+                })
+            }else if('xswjsl'===obj.event){
+                layer.prompt({
+                    formType: 2
+                    ,title: '详细注释'
+                    ,value: '这是线索挖掘的数量'
+                })
+            }
+        })
+    });
+    $('#button1').click(function(){
+        var url='';
+        if(enddate==null||enddate===''||enddate==='undefined'){
+            url='/result/getPage.action?dowload=dowload&limit=40&page=1';
+
+        }else{
+            url='/result/getByDate.action?dowload=dowload&enddate='+enddate;
+        }
+
+        window.location.href=url;
+    })
+
+</script>
+</body>
+</html>

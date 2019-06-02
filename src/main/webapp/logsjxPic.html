@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>ECharts</title>
+    <!-- 引入 echarts.js -->
+    <script src="echarts.js"></script>
+    <link rel="stylesheet" href="/layui/css/layui.css" media="all">
+    <script src="/layui/jquery.min.js"></script>
+    <script src="/layui/macarons.js"></script>
+</head>
+<body>
+<!-- 为ECharts准备一个具备大小（宽高）的Dom -->
+<!--<div id="main" style="width: 500px;height:400px;position: relative;left: 0"></div>-->
+<div>
+    <label class="layui-form-label">范围选择</label>
+    <div class="layui-input-inline">
+        <input class="layui-input laydate-icon" placeholder="起始日期" id="stardate">
+    </div>
+    <div class="layui-input-inline">
+        <input class="layui-input laydate-icon" placeholder="截止日期"  id="enddate">
+    </div>
+</div>
+    <div id="zhexian" style="width:950px;height: 400px;position: absolute;left:2%;top: 10%">
+
+    </div>
+</div>
+
+<script type="text/javascript" src="layui/layui.all.js"></script>
+<script src="/layui/layer.js"></script>
+<script type="text/javascript">
+
+
+
+
+    var thisURL = document.URL;
+    var  getval =thisURL.split('?')[1];
+    var showval= getval.split("=")[1];
+
+    var date1;
+    var myChart1 = echarts.init(document.getElementById('zhexian'),'macarons');
+    $.ajax({
+        url:'/getLogs/getLogsjxPic.action?comName='+showval,
+        dataType:'json',
+        async:false,
+        type:'post',
+        success:function (data) {
+            date1=data;
+        }
+
+    });
+
+    var icl=[];
+    var icd=[];
+    var createTime=[];
+    for(var i=0;i<date1.length;i++){
+        icl.push(date1[i].httpCounts);
+        icd.push(date1[i].zqCounts);
+        createTime.push(date1[i].countTime);
+    }
+    option = {
+        title: {
+            text: '近一周爬虫抓取统计',
+            subtext: '真实数据'
+        },
+        tooltip: {
+            trigger: 'axis'
+        },
+        legend: {
+            data:['解析数据量','解析成功数据量']
+        },
+        toolbox: {
+            show: true,
+            feature: {
+                dataZoom: {
+                    yAxisIndex: 'none'
+                },
+                dataView: {readOnly: false},
+                magicType: {type: ['line', 'bar']},
+                restore: {},
+                saveAsImage: {}
+            }
+        },
+        xAxis:  {
+            type: 'category',
+            boundaryGap: false,
+            data: createTime
+        },
+        yAxis: {
+            type: 'value',
+            axisLabel: {
+                formatter: '{value}'
+            }
+        },
+        series: [
+            {
+                name:'解析数据量',
+                type:'line',
+                data:icl,
+
+            },
+            {
+                name:'解析成功数据量',
+                type:'line',
+                data:icd,
+
+            }
+        ]
+    };
+
+
+    // 使用刚指定的配置项和数据显示图表。
+    myChart1.setOption(option);
+
+    var stardate="";
+    var enddate="";
+    layui.use('laydate', function(){
+        var laydate = layui.laydate;
+
+        //执行一个laydate实例
+        laydate.render({
+            elem: '#stardate', //指定元素
+            done:function(value){
+
+                stardate=value;
+
+            }
+        });
+    });
+    layui.use('laydate', function() {
+        var laydate = layui.laydate;
+
+        //执行一个laydate实例
+        laydate.render({
+            elem: '#enddate', //指定元素
+            done: function (value) {
+                enddate = value;
+                $.ajax({
+                    url: '/getLogs/getLogsjxPicByDate.action?starDate=' + stardate + '&endDate=' + enddate + '&comName=' + showval,
+                    dataType: 'json',
+                    async: false,
+                    type: 'post',
+                    success: function (data) {
+                        date1 = data;
+                    }
+
+                });
+
+                var icl=[];
+                var icd=[];
+                var createTime=[];
+                for(var i=0;i<date1.length;i++){
+                    icl.push(date1[i].httpCounts);
+                    icd.push(date1[i].zqCounts);
+                    createTime.push(date1[i].countTime);
+                }
+                option1 = {
+                    title: {
+                        text: '近一周爬虫抓取统计',
+                        subtext: '真实数据'
+                    },
+                    tooltip: {
+                        trigger: 'axis'
+                    },
+                    legend: {
+                        data:['解析数据量','解析成功数据量']
+                    },
+                    toolbox: {
+                        show: true,
+                        feature: {
+                            dataZoom: {
+                                yAxisIndex: 'none'
+                            },
+                            dataView: {readOnly: false},
+                            magicType: {type: ['line', 'bar']},
+                            restore: {},
+                            saveAsImage: {}
+                        }
+                    },
+                    xAxis:  {
+                        type: 'category',
+                        boundaryGap: false,
+                        data: createTime
+                    },
+                    yAxis: {
+                        type: 'value',
+                        axisLabel: {
+                            formatter: '{value}'
+                        }
+                    },
+                    series: [
+                        {
+                            name:'解析数据量',
+                            type:'line',
+                            data:icl,
+
+                        },
+                        {
+                            name:'解析成功数据量',
+                            type:'line',
+                            data:icd,
+
+                        }
+                    ]
+                };
+                myChart1.setOption(option1);
+            }
+        })
+
+    })
+
+
+
+</script>
+</body>
+</html>

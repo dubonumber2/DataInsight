@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+        <meta charset="utf-8">
+        <title>数据字典维护</title>
+        <link rel="stylesheet" href="/layui/css/layui.css" media="all">
+    <script src="/layui/jquery.min.js"></script>
+        <script type="text/javascript">
+
+
+        </script>
+    </head>
+<body>
+<div class="layui-form-pane" style="margin-top: 15px;">
+    <label class="layui-form-label">查找数据源</label>
+    <div class="layui-input-inline">
+        <input type="text" name="describe" id="describe" placeholder="例如:信用河北" autocomplete="off" class="layui-input">
+    </div>
+    <div class="layui-input-inline">
+        <button class="layui-btn layui-btn-warm" id="button2">筛选</button>
+        <button class="layui-btn" id="button1">新增数据源</button>
+    </div>
+    </div>
+
+
+
+
+<table id='main' class="layui-table" lay-data="{fixed:true,height:'full-10',cellMinWidth: 80, url:'/comname/getDataSourcewh.action',id:'test'}" lay-filter="test">
+    <thead>
+    <tr>
+
+        <th lay-data="{field:'describe',event:'test'}">数据源</th>
+        <th lay-data="{field:'name',sort: true}">描述</th>
+        <th lay-data="{field:'collection',event:'test'}">对应Collection</th>
+        <th lay-data="{field:'source',sort: true}">对应Source</th>
+        <th lay-data="{fixed: 'right',align:'center', toolbar: '#barDemo'}"></th>
+
+
+    </tr>
+    </thead>
+</table>
+<script type="text/html" id="barDemo">
+    <a class="layui-btn layui-btn-mini" lay-event="edit">编辑</a>
+    <a class="layui-btn layui-btn-danger layui-btn-mini" lay-event="del">删除</a>
+</script>
+<script src="/layui/layui.js"></script>
+<script type="text/javascript" src="layui/layui.all.js"></script>
+<script type="text/javascript" src="js/dataSourceTable.js"></script>
+
+</body>
+</html>

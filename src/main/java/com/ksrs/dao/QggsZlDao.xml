@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "mybatis-3-mapper.dtd">
+<mapper namespace="com.ksrs.dao.QggsZlDao">
+    <select id="getDataByDate" resultType="com.ksrs.entity.QggsZl">
+        select "province","hwebtype" as have_webtype,"hbaidutype" as have_baidu,
+        "h58type" as have_58,"hgjtype" as have_gj,"have_lx" ,"hava_gstel1" as have_gssj,
+        "hava_gstel2" as have_gsgh,"hava_zptel1" as have_zpsj,"hava_zptel2" as have_zpgh,
+        "hava_email" as have_email,"have_web" as have_web,"have_zhaoping" as have_zpxx,"have_zczb","have_zch","have_jyfw","have_zcd" as have_zcdz
+        ,"have_fr","have_ygs","have_rzlc","sjwzjj" as have_sjwzjj,"sjwzbj" as have_sjwzbj,"countTime" ,"have_sqsj","have_sqgh","have_zsjmsj"
+        ,"have_zsjmgh","have_qtsj","have_qtgh","have_baixin" from
+        statistcs_zl where "countTime"=to_date(#{endDate},'yyyy-MM-dd') and "dataType"='zl'
+        union All
+        select '合计' as province,sum("hwebtype") as have_webtype,sum("hbaidutype") as have_baidu,
+        sum("h58type") as have_58,sum("hgjtype") as have_gj,sum(have_lx) as have_lx,sum("hava_gstel1") as "hava_gstel1",
+        sum("hava_gstel2") as hava_gstel2,sum("hava_zptel1") as "hava_zptel1",sum("hava_zptel2") as "hava_zptel2",
+        sum("hava_email") as hava_email,sum("have_web" ) as "have_web" ,sum("have_zhaoping") as "have_zpxx",sum(have_zczb) as have_zczb,sum("have_zch") as have_zch ,sum("have_jyfw") as have_jyfw,sum(have_zcd) as have_zcdz,
+        sum("have_fr") as have_fr,sum(have_ygs) as have_ygs,sum(have_rzlc) as have_rzlc ,sum(sjwzjj) as sjwzjj,sum(sjwzbj) as sjwzbj,now()-INTERVAL '1d' as fc,sum("have_sqsj") as have_sqsj,
+        sum("have_sqgh") as have_sqgh,sum("have_zsjmsj") as have_zsjmsj,sum("have_zsjmgh") as have_zsjmgh,
+        sum("have_qtsj") as have_qtsj,sum("have_qtgh") as have_qtgh,sum("have_baixin") as have_baixin
+        from
+        statistcs_zl where  "dataType"='zl' and "countTime"=to_date(#{endDate},'yyyy-MM-dd')
+    </select>
+    <select id="getJyzData" resultType="com.ksrs.entity.QggsZl">
+        select "province","hwebtype" as have_webtype,"hbaidutype" as have_baidu,
+        "h58type" as have_58,"hgjtype" as have_gj,"have_lx" ,"hava_gstel1" as have_gssj,
+        "hava_gstel2" as have_gsgh,"hava_zptel1" as have_zpsj,"hava_zptel2" as have_zpgh,
+        "hava_email" as have_email,"have_web" as have_web,"have_zhaoping" as have_zpxx,"have_zczb","have_zch","have_jyfw","have_zcd" as have_zcdz
+        ,"have_fr","have_ygs","have_rzlc","sjwzjj" as have_sjwzjj,"sjwzbj" as have_sjwzbj,"countTime"
+        ,"have_sqsj","have_sqgh","have_zsjmsj"
+        ,"have_zsjmgh","have_qtsj","have_qtgh","have_baixin"
+        from
+        statistcs_zl where "countTime"=to_date(#{endDate},'yyyy-MM-dd') and "dataType"='jyz'
+        union all
+        select '合计' as province,sum("hwebtype") as have_webtype,sum("hbaidutype") as have_baidu,
+        sum("h58type") as have_58,sum("hgjtype") as have_gj,sum(have_lx) as have_lx,sum("hava_gstel1") as "hava_gstel1",
+        sum("hava_gstel2") as hava_gstel2,sum("hava_zptel1") as "hava_zptel1",sum("hava_zptel2") as "hava_zptel2",
+        sum("hava_email") as hava_email,sum("have_web" ) as "have_web" ,sum("have_zhaoping") as "have_zpxx",sum(have_zczb) as have_zczb,sum("have_zch") as have_zch ,sum("have_jyfw") as have_jyfw,sum(have_zcd) as have_zcdz,
+        sum("have_fr") as have_fr,sum(have_ygs) as have_ygs,sum(have_rzlc) as have_rzlc ,sum(sjwzjj) as sjwzjj,sum(sjwzbj) as sjwzbj,now()-INTERVAL '1d' as fc
+        ,sum("have_sqsj") as have_sqsj,
+        sum("have_sqgh") as have_sqgh,sum("have_zsjmsj") as have_zsjmsj,sum("have_zsjmgh") as have_zsjmgh,
+        sum("have_qtsj") as have_qtsj,sum("have_qtgh") as have_qtgh,sum("have_baixin") as baixin
+        from
+        statistcs_zl where  "dataType"='jyz' and "countTime"=to_date(#{endDate},'yyyy-MM-dd')
+    </select>
+    <select id="getFzcData" resultType="com.ksrs.entity.QggsZl">
+        select "province","hwebtype" as have_webtype,"hbaidutype" as have_baidu,
+        "h58type" as have_58,"hgjtype" as have_gj,"have_lx" ,"hava_gstel1" as have_gssj,
+        "hava_gstel2" as have_gsgh,"hava_zptel1" as have_zpsj,"hava_zptel2" as have_zpgh,
+        "hava_email" as have_email,"have_web" as have_web,"have_zhaoping" as have_zpxx,"have_zczb","have_zch","have_jyfw","have_zcd" as have_zcdz
+        ,"have_fr","have_ygs","have_rzlc","sjwzjj" as have_sjwzjj,"sjwzbj" as have_sjwzbj,"countTime"
+        ,"have_sqsj","have_sqgh","have_zsjmsj"
+        ,"have_zsjmgh","have_qtsj","have_qtgh","have_baixin"
+        from
+        statistcs_zl where "countTime"=to_date(#{endDate},'yyyy-MM-dd') and "dataType"='fzc'
+        union all
+        select '合计' as province,sum("hwebtype") as have_webtype,sum("hbaidutype") as have_baidu,
+        sum("h58type") as have_58,sum("hgjtype") as have_gj,sum(have_lx) as have_lx,sum("hava_gstel1") as "hava_gstel1",
+        sum("hava_gstel2") as hava_gstel2,sum("hava_zptel1") as "hava_zptel1",sum("hava_zptel2") as "hava_zptel2",
+        sum("hava_email") as hava_email,sum("have_web" ) as "have_web" ,sum("have_zhaoping") as "have_zpxx",sum(have_zczb) as have_zczb,sum("have_zch") as have_zch ,sum("have_jyfw") as have_jyfw,sum(have_zcd) as have_zcdz,
+        sum("have_fr") as have_fr,sum(have_ygs) as have_ygs,sum(have_rzlc) as have_rzlc ,sum(sjwzjj) as sjwzjj,sum(sjwzbj) as sjwzbj,now()-INTERVAL '1d' as fc
+        ,sum("have_sqsj") as have_sqsj,
+        sum("have_sqgh") as have_sqgh,sum("have_zsjmsj") as have_zsjmsj,sum("have_zsjmgh") as have_zsjmgh,
+        sum("have_qtsj") as have_qtsj,sum("have_qtgh") as have_qtgh,sum("have_baixin") as have_baixin
+        from
+        statistcs_zl where  "dataType"='fzc' and "countTime"=to_date(#{endDate},'yyyy-MM-dd')
+    </select>
+    <select id="getQtData" resultType="com.ksrs.entity.QggsZl">
+        select "province","hwebtype" as have_webtype,"hbaidutype" as have_baidu,
+        "h58type" as have_58,"hgjtype" as have_gj,"have_lx" ,"hava_gstel1" as have_gssj,
+        "hava_gstel2" as have_gsgh,"hava_zptel1" as have_zpsj,"hava_zptel2" as have_zpgh,
+        "hava_email" as have_email,"have_web" as have_web,"have_zhaoping" as have_zpxx,"have_zczb","have_zch","have_jyfw","have_zcd" as have_zcdz
+        ,"have_fr","have_ygs","have_rzlc","sjwzjj" as have_sjwzjj,"sjwzbj" as have_sjwzbj,"countTime"
+        ,"have_sqsj","have_sqgh","have_zsjmsj"
+        ,"have_zsjmgh","have_qtsj","have_qtgh","have_baixin"
+        from
+        statistcs_zl where "countTime"=to_date(#{endDate},'yyyy-MM-dd') and "dataType"='qt'
+        union all
+        select '合计' as province,sum("hwebtype") as have_webtype,sum("hbaidutype") as have_baidu,
+        sum("h58type") as have_58,sum("hgjtype") as have_gj,sum(have_lx) as have_lx,sum("hava_gstel1") as "hava_gstel1",
+        sum("hava_gstel2") as hava_gstel2,sum("hava_zptel1") as "hava_zptel1",sum("hava_zptel2") as "hava_zptel2",
+        sum("hava_email") as hava_email,sum("have_web" ) as "have_web" ,sum("have_zhaoping") as "have_zpxx",sum(have_zczb) as have_zczb,sum("have_zch") as have_zch ,sum("have_jyfw") as have_jyfw,sum(have_zcd) as have_zcdz,
+        sum("have_fr") as have_fr,sum(have_ygs) as have_ygs,sum(have_rzlc) as have_rzlc ,sum(sjwzjj) as sjwzjj,sum(sjwzbj) as sjwzbj,now()-INTERVAL '1d' as fc
+        ,sum("have_sqsj") as have_sqsj,
+        sum("have_sqgh") as have_sqgh,sum("have_zsjmsj") as have_zsjmsj,sum("have_zsjmgh") as have_zsjmgh,
+        sum("have_qtsj") as have_qtsj,sum("have_qtgh") as have_qtgh,sum("have_baixin") as have_baixin
+        from
+        statistcs_zl where  "dataType"='qt' and "countTime"=to_date(#{endDate},'yyyy-MM-dd')
+    </select>
+</mapper>

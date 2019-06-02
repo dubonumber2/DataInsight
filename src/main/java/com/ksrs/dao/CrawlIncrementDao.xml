@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.ksrs.dao.CrawlIncrementDao">
+    <select id="getAll" resultType="com.ksrs.entity.CrawlIncrement">
+        select crawlIncrement.*,s.number,s.detNum from crawlIncrement left join statistics  s on crawlIncrement.name=s.name and crawlIncrement.createTime=s.createTime where data_state=${1} and TO_DAYS(crawlIncrement.createTime)=TO_DAYS(NOW()) limit #{start},#{pagesize}
+    </select>
+    <select id="getTotal" resultType="int">
+        select count(*) from crawlIncrement where data_state=${1} and TO_DAYS(crawlIncrement.createTime)=TO_DAYS(NOW())
+    </select>
+
+
+    <select id="getTotalByDate" resultType="int">
+        select count(*) from crawlIncrement left join statistics  s on crawlIncrement.name=s.name and crawlIncrement.createTime=s.createTime where data_state=${1} and to_days(crawlIncrement.createTime) between to_days(#{start}) and to_days(#{end})
+    </select>
+    <select id="getByDate" resultType="com.ksrs.entity.CrawlIncrement" >
+        select crawlIncrement.*,s.number,s.detNum from crawlIncrement left join statistics  s on crawlIncrement.name=s.name and crawlIncrement.createTime=s.createTime where data_state=${1} and to_days(crawlIncrement.createTime) between to_days(#{start}) and to_days(#{end})  limit #{str},#{pagesize}
+    </select>
+    <select id="getTotalDetailByName" resultType="int" >
+        select count(*) from crawlIncrement where data_state=${1} and name=#{name}
+    </select>
+    <select id="getTotalByDateName" resultType="int">
+        select count(*) from crawlIncrement where data_state=${1} and to_days(crawlIncrement.createTime) between to_days(#{start}) and
+        to_days(#{end}) and name=#{name}
+    </select>
+    <select id="getDetailByName" resultType="com.ksrs.entity.CrawlIncrement">
+        select crawlIncrement.*,s.number,s.detNum from crawlIncrement left join statistics  s on crawlIncrement.name=s.name and crawlIncrement.createTime=s.createTime where data_state=${1} and crawlIncrement.name=#{name} limit #{str},#{pagesize}
+    </select>
+    <select id="getByDateName" resultType="com.ksrs.entity.CrawlIncrement">
+        select crawlIncrement.*,s.number,s.detNum from crawlIncrement left join statistics  s on crawlIncrement.name=s.name and crawlIncrement.createTime=s.createTime where data_state=${1} and crawlIncrement.name=#{name} and (TO_DAYS(crawlIncrement.createTime) between TO_DAYS(#{start}) and TO_DAYS(#{end})) limit #{str},#{pagesize}
+
+    </select>
+
+</mapper>

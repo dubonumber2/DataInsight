@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "mybatis-3-mapper.dtd">
+<mapper namespace="com.ksrs.dao.ClueminingPcpDao">
+    <select id="getByOpName" resultType="com.ksrs.entity.User_operation">
+        SELECT cpu.user_company as user_company,cpu.user_real_name as realname,cpu.user_name,
+        cpuap.operation_name as operation_name,cpuap.operation_explain as operation_explain,cpuap.operation_time as operation_time,cpuap.downloadcount as dowloadcount,
+        cpuap.create_time as statistic_time
+        from cluemining_pcp_user_action_process cpuap left join cluemining_pcp_user cpu on cpu.user_name=cpuap.user_name
+            <where>
+                <if test="operation_time!=null and operation_time.length()>0 and end_time!=null and end_time.length()>0">
+                    to_date(cpuap."operation_time",'yyyy-MM-dd') between to_date(#{operation_time},'yyyy-MM-dd') and to_date(#{end_time},'yyyy-MM-dd')
+                </if>
+                <if test="operation_name!=null and operation_name.length()>0">
+                    and cpuap."operation_name"=#{operation_name}
+                </if>
+                <if test="user_name!=null and user_name.length()>0">
+                    and cpuap.user_name like '%${user_name}%'
+                </if>
+                <if test="user_company!=null and user_company.length()>0">
+                    and cpu.user_company=#{user_company}
+                </if>
+                <if test="realname!=null and realname.length()>0">
+                    and cpu.user_real_name like '%${realname}%'
+                </if>
+                <if test="user_type!=null and user_type.length()>0">
+                    and cpu.user_type=#{user_type}
+                </if>
+
+            </where>
+            limit #{page} offset #{pageSize}
+    </select>
+
+    <select id="getTotal" resultType="java.lang.Integer">
+        SELECT count(*) from cluemining_pcp_user_action_process cpuap  left join cluemining_pcp_user cpu on cpu.user_name=cpuap.user_name
+        <where>
+            <if test="operation_time!=null and operation_time.length()>0 and end_time!=null and end_time.length()>0">
+                to_date(cpuap."operation_time",'yyyy-MM-dd') between to_date(#{operation_time},'yyyy-MM-dd') and to_date(#{end_time},'yyyy-MM-dd')
+            </if>
+            <if test="operation_name!=null and operation_name.length()>0">
+                and cpuap."operation_name"=#{operation_name}
+            </if>
+            <if test="user_name!=null and user_name.length()>0">
+                and cpuap.user_name like '%${user_name}%'
+            </if>
+            <if test="user_company!=null and user_company.length()>0">
+                and cpu.user_company=#{user_company}
+            </if>
+            <if test="realname!=null and realname.length()>0">
+                and cpu.user_real_name like '%${realname}%'
+            </if>
+            <if test="user_type!=null and user_type.length()>0">
+                and cpu.user_type=#{user_type}
+            </if>
+
+        </where>
+    </select>
+</mapper>

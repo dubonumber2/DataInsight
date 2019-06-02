@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.ksrs.dao.LongCaiDao">
+   <resultMap id="longcai" type="com.ksrs.entity.LongCai">
+       <result column="query_amount" property="queryAmount"></result>
+       <result column="result_amount" property="resultAmount"></result>
+       <result column="counttime" property="countTime"></result>
+   </resultMap>
+
+    <select id="getData" resultMap="longcai">
+        select query_amount,result_amount,"counttime" from cluemining_longcai
+        <where>
+            <if test="starDate!=null and starDate.length()>0 and endDate!=null and endDate.length()>0">
+                to_date("counttime",'yyyy-MM-dd') between to_date(#{starDate},'yyyy-MM-dd') and to_date(#{endDate},'yyyy-MM-dd')
+            </if>
+        </where>
+        order by to_date("counttime",'yyyy-MM-dd') asc
+    </select>
+    <select id="getOne" resultMap="longcai">
+        select query_amount,result_amount,"counttime" from cluemining_longcai
+            order by to_date("counttime",'yyyy-MM-dd') desc
+            limit 1 offset 0
+    </select>
+
+    <select id="getCzData" resultMap="longcai">
+        select query_amount,result_amount,"counttime" from cluemining_cz
+        <where>
+            <if test="starDate!=null and starDate.length()>0 and endDate!=null and endDate.length()>0">
+                to_date("counttime",'yyyy-MM-dd') between to_date(#{starDate},'yyyy-MM-dd') and to_date(#{endDate},'yyyy-MM-dd')
+            </if>
+        </where>
+        order by to_date("counttime",'yyyy-MM-dd') asc
+    </select>
+</mapper>

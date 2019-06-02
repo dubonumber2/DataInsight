@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+        <meta charset="utf-8">
+        <title>线索挖掘用户</title>
+        <link rel="stylesheet" href="/layui/css/layui.css" media="all">
+    <script src="/layui/jquery.min.js"></script>
+        <script type="text/javascript">
+
+
+        </script>
+    </head>
+<body>
+<div class="layui-form-pane" style="margin-top: 15px;">
+
+
+
+        <div class="layui-input-inline">
+            <button class="layui-btn" id="button1">添加用户</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<table id='main' class="layui-table" lay-data="{fixed:true,height:'full-10',cellMinWidth: 80, url:'/useroperation/getUser.action',id:'test',page:true,limit:50, limits:[50,100,150,200]}" lay-filter="test">
+    <thead>
+    <tr>
+
+        <th lay-data="{field:'user_company',event:'test'}">所属公司</th>
+        <th lay-data="{field:'realname',sort: true}">真实姓名</th>
+        <th lay-data="{field:'user_name',sort: true}">用户名</th>
+        <th lay-data="{field:'user_type',sort: true}">用户类型</th>
+
+    </tr>
+    </thead>
+</table>
+<script src="/layui/layui.js"></script>
+<script type="text/javascript" src="layui/layui.all.js"></script>
+<script>
+    $('#button1').click(function(){
+        layer.open({
+            type: 2,
+            skin: 'layui-layer-rim', //加上边框
+            area: ['450px', '333px'], //宽高
+            content: '/insertUser.html',
+            end:function () {
+                location.reload();
+            }
+        });
+
+
+    })
+
+</script>
+</body>
+</html>

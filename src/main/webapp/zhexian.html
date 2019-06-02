@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>ECharts</title>
+    <!-- 引入 echarts.js -->
+    <script src="echarts.js"></script>
+    <script src="/layui/jquery.min.js"></script>
+</head>
+<body>
+<!-- 为ECharts准备一个具备大小（宽高）的Dom -->
+<div id="main" style="width: 600px;height:400px;"></div>
+<script type="text/javascript">
+    // 基于准备好的dom，初始化echarts实例
+    var date;
+    var myChart = echarts.init(document.getElementById('main'));
+
+    $.ajax({
+        url:'/zhexian/getdata.action',
+        dataType:'json',
+        async:false,
+        type:'post',
+        success:function (data) {
+            date=data;
+        }
+
+    });
+    //图表显示提示信息
+
+
+
+
+
+    // 指定图表的配置项和数据
+    option = {
+        title: {
+            text: '近五天增量的变化情况',
+            subtext: '真实数据'
+        },
+        tooltip: {
+            trigger: 'axis'
+        },
+        legend: {
+            data:['日列表增量','日详情增量']
+        },
+        toolbox: {
+            show: true,
+            feature: {
+                dataZoom: {
+                    yAxisIndex: 'none'
+                },
+                dataView: {readOnly: false},
+                magicType: {type: ['line', 'bar']},
+                restore: {},
+                saveAsImage: {}
+            }
+        },
+        xAxis:  {
+            type: 'category',
+            boundaryGap: false,
+            data: ['之前','大前天','前天','昨天','今天']
+        },
+        yAxis: {
+            type: 'value',
+            axisLabel: {
+                formatter: '{value} 次'
+            }
+        },
+        series: [
+            {
+                name:'日列表增量',
+                type:'line',
+                data:[date.now4, date.now3, date.now2, date.now],
+                markPoint: {
+                    data: [
+                        {type: 'max', name: '最大值'},
+                        {type: 'min', name: '最小值'}
+                    ]
+                },
+                markLine: {
+                    data: [
+                        {type: 'average', name: '平均值'}
+                    ]
+                }
+            },
+            {
+                name:'日详情增量',
+                type:'line',
+                data:[date.ind5, date.ind4, date.ind3, date.ind2, date.ind1],
+                markPoint: {
+                    data: [
+                        {name: '周最低', value: -2, xAxis: 1, yAxis: -1.5}
+                    ]
+                },
+                markLine: {
+                    data: [
+                        {type: 'average', name: '平均值'},
+                        [{
+                            symbol: 'none',
+                            x: '90%',
+                            yAxis: 'max'
+                        }, {
+                            symbol: 'circle',
+                            label: {
+                                normal: {
+                                    position: 'start',
+                                    formatter: '最大值'
+                                }
+                            },
+                            type: 'max',
+                            name: '最高点'
+                        }]
+                    ]
+                }
+            }
+        ]
+    };
+
+
+    // 使用刚指定的配置项和数据显示图表。
+    myChart.setOption(option);
+</script>
+</body>
+</html>

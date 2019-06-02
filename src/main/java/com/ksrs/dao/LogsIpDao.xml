@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "mybatis-3-mapper.dtd">
+<mapper namespace="com.ksrs.dao.LogsIpDao">
+    <select id="getIpSendHttp" resultType="com.ksrs.entity.LogsIp">
+        select sum("ipSendHttp") as ipSendHttp ,"countTime" from statistics_ip group by "countTime" ORDER BY "countTime";
+    </select>
+    <select id="getSaotu" resultType="com.ksrs.entity.LogsIp">
+
+        select sum("sendHttpCounts") as "sendHttpCounts", sum("ipSendHttp") as "ipSendHttp" ,sum("sendVisitCounts") as "sendVisitCounts" ,sum("sendRedCounts") as "sendRedCounts","countTime" from statistics_ip group by "countTime" ORDER BY "countTime" ;
+    </select>
+    <select id="getLouDou" resultType="com.ksrs.entity.LogsIp">
+        select sum("sendHttpCounts") as "sendHttpCounts", sum("ipSendHttp") as "ipSendHttp" ,sum("sendVisitCounts") as "sendVisitCounts" ,sum("sendRedCounts") as "sendRedCounts","countTime" from statistics_ip where "countTime"=to_date(to_char(now(),'yyyy-MM-dd'),'yyyy-MM-dd')-INTERVAL '1d' group by "countTime";
+    </select>
+    <select id="getLouDouByDate" resultType="com.ksrs.entity.LogsIp">
+        select sum("sendHttpCounts") as "sendHttpCounts", sum("ipSendHttp") as "ipSendHttp" ,sum("sendVisitCounts") as "sendVisitCounts" ,sum("sendRedCounts") as "sendRedCounts","countTime" from statistics_ip where "countTime"=to_date(#{endDate},'yyyy-MM-dd') group by "countTime";
+    </select>
+</mapper>

@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+        <meta charset="utf-8">
+        <title>公司详细数据</title>
+        <link rel="stylesheet" href="/layui/css/layui.css" media="all">
+    <script src="/layui/jquery.min.js"></script>
+        <script type="text/javascript">
+
+
+        </script>
+    </head>
+<body>
+<div class="layui-form-pane" style="margin-top: 15px;">
+    <div class="layui-form-item">
+        <label class="layui-form-label">选择日期</label>
+        <div class="layui-input-inline">
+            <input class="layui-input laydate-icon" placeholder="起始日期"  id="enddate">
+        </div>
+        <div class="layui-input-inline">
+            <input class="layui-input laydate-icon" placeholder="截止日期"  id="zenddate">
+        </div>
+        <div class="layui-input-inline">
+        <div class="layui-form" style="width: 550px">
+            <label class="layui-form-label">操作选择</label>
+            <div class="layui-input-block">
+                <input type="radio" name="sex" value="筛选操作" title="筛选" >
+                <input type="radio" name="sex" value="登录操作" title="登录">
+                <input type="radio" name="sex" value="精确查找操作" title="精确查找" >
+                <input type="radio" name="sex" value="下载操作" title="下载" >
+            </div>
+        </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">查找用户</label>
+                <div class="layui-input-inline" style="width:110px">
+                    <input type="text" name="username" id="username" placeholder="例如:lizhenxia" autocomplete="off" class="layui-input">
+                </div>
+            <div class="layui-input-inline" style="width: 110px">
+                <input type="text" name="realname" id="realname" placeholder="例如:张三" autocomplete="off" class="layui-input">
+            </div>
+            <div class="layui-input-inline" style="width:200px">
+                <div class="layui-form" lay-filter="test2" >
+                    <label class="layui-form-label">公司名称</label>
+                    <div class="layui-input-block">
+                        <select name="user_company" lay-filter="company" id="user_company" lay-search="">
+
+
+
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-input-inline" style="width:200px">
+                <div class="layui-form" lay-filter="test3">
+                    <label class="layui-form-label">用户类型</label>
+                    <div class="layui-input-block">
+                        <select name="user_type" lay-filter="user_type" id="user_type" lay-search="">
+                            <option value="">请选择</option>
+                            <option value="正式用户">正式用户</option>
+                            <option value="测试用户">测试用户</option>
+                            <option value="内部用户">内部用户</option>
+                            <option value="兼职销售">兼职销售</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-input-inline">
+                <button class="layui-btn layui-btn-warm" id="button1">筛选</button>
+                <button class="layui-btn layui-btn-warm" id="button2">导出Excel</button>
+            </div>
+
+
+
+            </div>
+        </div>
+    </div>
+</div>
+<table id='main' class="layui-table" lay-data="{fixed:true,height:'full-10',cellMinWidth: 80, url:'/useroperation/getByName1.action', page:true,limit:100, limits:[100,600,900,1200],id:'test'}" lay-filter="test">
+    <thead>
+    <tr>
+        <th lay-data="{field:'user_company',event:'test'}">公司名称</th>
+        <th lay-data="{field:'realname',event:'test'}">真实姓名</th>
+        <th lay-data="{field:'user_name',event:'test'}">用户名</th>
+        <th lay-data="{field:'operation_name',sort: true}">操作名称</th>
+        <th lay-data="{field:'operation_explain',sort: true}">操作详情</th>
+        <th lay-data="{field:'operation_time',sort: true}">操作时间</th>
+
+        <!--<th lay-data="{field:'wealth', width:135, sort: true}">财富</th>-->
+    </tr>
+    </thead>
+</table>
+
+<script src="/layui/layui.js"></script>
+<script type="text/javascript" src="layui/layui.all.js"></script>
+<script type="text/javascript" src="js/useroperation.js"></script>
+</body>
+</html>

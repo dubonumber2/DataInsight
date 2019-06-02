@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "mybatis-3-mapper.dtd">
+<mapper namespace="com.ksrs.dao.ParserViewDao">
+
+    <select id="getData" resultType="com.ksrs.entity.ParserView">
+        SELECT sum(parsecounts) as parserSum,sum(parsesuccess) as parserSucc,sum(parsefailcounts) as parserFail,sum(parsepagecounts) as parserList,"countTime" as createTime FROM "public"."statistics_parse" group by "countTime" ORDER BY "countTime";
+    </select>
+    <select id="getDataByDate" resultType="com.ksrs.entity.ParserView">
+        SELECT sum(parsecounts) as parserSum,sum(parsesuccess) as parserSucc,sum(parsefailcounts) as parserFail,sum(parsepagecounts) as parserList,"countTime" as createTime FROM "public"."statistics_parse" where "countTime" between to_date(#{startDate},'yyyy-MM-dd') and to_date(#{endDate},'yyyy-MM-dd') group by "countTime" ORDER BY "countTime";
+    </select>
+    <select id="getIpHttpDate" resultType="com.ksrs.entity.ParserView">
+        select sum("sendHttpCounts") as parserSum,sum("sendVisitCounts") as parserSucc,"countTime" as createTime from statistics_ip where "countTime" between to_date(#{startDate},'yyyy-MM-dd') and to_date(#{endDate},'yyyy-MM-dd') group by "countTime" order by "countTime"
+    </select>
+    <select id="getIpHttp" resultType="com.ksrs.entity.ParserView">
+        select sum("sendHttpCounts") as parserSum,sum("sendVisitCounts") as parserSucc,"countTime" as createTime from statistics_ip where "countTime" BETWEEN now()-INTERVAL '8d' and now()  group by "countTime" order by "countTime"
+    </select>
+    <select id="getListHttp" resultType="com.ksrs.entity.ParserView">
+        SELECT sum("sendHttpCounts") as parserSum,sum("sendVisitCounts") as parserSucc, "countTime" as createTime FROM "public"."statistics_ip" where "dataSource" like '%List%' and  "countTime" BETWEEN now()-INTERVAL '8d' and now()  group by "countTime" ORDER BY "countTime";
+    </select>
+    <select id="getListHttpByDate" resultType="com.ksrs.entity.ParserView">
+        SELECT sum("sendHttpCounts") as parserSum,sum("sendVisitCounts") as parserSucc,"countTime" as createTime FROM "public"."statistics_ip" where "dataSource" like '%List%' and  "countTime" BETWEEN to_date(#{startDate},'yyyy-MM-dd') and to_date(#{endDate},'yyyy-MM-dd')  group by "countTime" ORDER BY "countTime";
+    </select>
+    <select id="getDetailHttp" resultType="com.ksrs.entity.ParserView">
+        SELECT sum("sendHttpCounts") as parserSum,sum("sendVisitCounts") as parserSucc,"countTime" as createTime FROM "public"."statistics_ip" where "dataSource" like '%detail%' and  "countTime" BETWEEN now()-INTERVAL '8d' and now()  group by "countTime" ORDER BY "countTime";
+    </select>
+    <select id="getDetailHttpByDate" resultType="com.ksrs.entity.ParserView">
+        SELECT sum("sendHttpCounts") as parserSum,sum("sendVisitCounts") as parserSucc,"countTime" as createTime FROM "public"."statistics_ip" where "dataSource" like '%detail%' and  "countTime" BETWEEN to_date(#{startDate},'yyyy-MM-dd') and to_date(#{endDate},'yyyy-MM-dd') group by "countTime" ORDER BY "countTime";
+    </select>
+
+</mapper>

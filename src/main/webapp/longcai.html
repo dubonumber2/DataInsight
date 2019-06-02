@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>龙采使用报告</title>
+    <!-- 引入 echarts.js -->
+    <script src="echarts.js"></script>
+    <link rel="stylesheet" href="/layui/css/layui.css" media="all">
+    <script src="/layui/jquery.min.js"></script>
+    <script src="/layui/macarons.js"></script>
+</head>
+<body>
+<!-- 为ECharts准备一个具备大小（宽高）的Dom -->
+<!--<div id="main" style="width: 500px;height:400px;position: relative;left: 0"></div>-->
+<div>
+    <label class="layui-form-label">范围选择</label>
+    <div class="layui-input-inline">
+        <input class="layui-input laydate-icon" placeholder="起始日期" id="stardate">
+    </div>
+    <div class="layui-input-inline">
+        <input class="layui-input laydate-icon" placeholder="截止日期"  id="enddate">
+    </div>
+
+    <div id="zhexian" style="width:900px;height: 400px;position: absolute;left:2%;top: 10%">
+
+    </div>
+</div>
+
+<script type="text/javascript" src="layui/layui.all.js"></script>
+<script src="/layui/layer.js"></script>
+<script type="text/javascript">
+
+
+
+
+
+
+    var comname="";
+    var date1;
+    //自适应宽高
+    var myChart1=document.getElementById('zhexian');
+    var myChartContainer = function () {
+        myChart1.style.width = window.innerWidth-50+'px';
+        myChart1.style.height = window.innerHeight-100+'px';
+    };
+    myChartContainer();
+    var myChart1 = echarts.init(myChart1,'macarons');
+
+    $.ajax({
+        url:'/longcai/getData.action',
+        dataType:'json',
+        async:false,
+        type:'post',
+        success:function (data) {
+            date1=data;
+        }
+
+    });
+
+    var queryAmount=[];
+    var resultAmount=[];
+    var createTime=[];
+    for(var i=0;i<date1.length;i++){
+        queryAmount.push(date1[i].queryAmount);
+        resultAmount.push(date1[i].resultAmount);
+        createTime.push(date1[i].countTime);
+    }
+    option = {
+        title: {
+            text: '近一周龙采使用情况',
+            subtext: '真实数据'
+        },
+        tooltip: {
+            trigger: 'axis'
+        },
+        legend: {
+            data:['查询线索数量','返回线索数量']
+        },
+        toolbox: {
+            show : true,
+            feature : {
+                mark : {show: true},
+                dataView : {show: false, readOnly: false},
+                magicType : {show: true, type: ['line', 'bar']},
+                restore : {show: true},
+                saveAsImage : {show: true}
+            }
+        },
+        xAxis:  {
+            type: 'category',
+            boundaryGap: false,
+            data: createTime
+        },
+        yAxis: {
+            type: 'value',
+            axisLabel: {
+                formatter: '{value}'
+            }
+        },
+        series: [
+            {
+                name:'查询线索数量',
+                type:'line',
+                smooth:false,
+                data:queryAmount,
+                markPoint : {
+                    data : [
+                        {type : 'max', name: '最大值'},
+                        {type : 'min', name: '最小值'}
+                    ]
+                },
+                markLine : {
+                    data : [
+                        {type : 'average', name: '平均值'}
+                    ]
+                },
+                //itemStyle:{ normal: {label : {show: true}}}
+
+            },
+            {
+                name:'返回线索数量',
+                type:'line',
+                smooth:false,
+                data:resultAmount,
+                markPoint : {
+                    data : [
+                        {type : 'max', name: '最大值'},
+                        {type : 'min', name: '最小值'}
+                    ]
+                },
+                markLine : {
+                    data : [
+                        {type : 'average', name: '平均值'}
+                    ]
+                },
+                //itemStyle:{ normal: {label : {show: true}}}
+
+            }
+
+        ],
+
+    };
+
+
+    // 使用刚指定的配置项和数据显示图表。
+    myChart1.setOption(option);
+
+    var stardate="";
+    var enddate="";
+    var comname="";
+    layui.use('laydate', function(){
+        var laydate = layui.laydate;
+
+        //执行一个laydate实例
+        laydate.render({
+            elem: '#stardate', //指定元素
+            done:function(value){
+
+                stardate=value;
+
+            }
+        });
+    });
+    layui.use('laydate', function(){
+        var laydate = layui.laydate;
+
+        //执行一个laydate实例
+        laydate.render({
+            elem: '#enddate', //指定元素
+            done:function(value){
+                enddate=value;
+                $.ajax({
+                    url:'/longcai/getData.action?starDate='+stardate+'&endDate='+enddate,
+                    dataType:'json',
+                    async:false,
+                    type:'post',
+                    success:function (data) {
+                        date1=data;
+                    }
+
+                });
+
+                var queryAmount=[];
+                var resultAmount=[];
+                var createTime=[];
+                for(var i=0;i<date1.length;i++){
+                    queryAmount.push(date1[i].queryAmount);
+                    resultAmount.push(date1[i].resultAmount);
+                    createTime.push(date1[i].countTime);
+                }
+                option = {
+                    title: {
+                        text: '近一周龙采使用情况',
+                        subtext: '真实数据'
+                    },
+                    tooltip: {
+                        trigger: 'axis'
+                    },
+                    legend: {
+                        data:['查询线索数量','返回线索数量']
+                    },
+                    toolbox: {
+                        show : true,
+                        feature : {
+                            mark : {show: true},
+                            dataView : {show: true, readOnly: false},
+                            magicType : {show: true, type: ['line', 'bar']},
+                            restore : {show: true},
+                            saveAsImage : {show: true}
+                        }
+                    },
+                    xAxis:  {
+                        type: 'category',
+                        boundaryGap: false,
+                        data: createTime
+                    },
+                    yAxis: {
+                        type: 'value',
+                        axisLabel: {
+                            formatter: '{value}'
+                        }
+                    },
+                    series: [
+                        {
+                            name:'查询线索数量',
+                            type:'line',
+                            smooth:false,
+                            data:queryAmount,
+                            markPoint : {
+                                data : [
+                                    {type : 'max', name: '最大值'},
+                                    {type : 'min', name: '最小值'}
+                                ]
+                            },
+                            markLine : {
+                                data : [
+                                    {type : 'average', name: '平均值'}
+                                ]
+                            },
+                           // itemStyle:{ normal: {label : {show: true}}}
+
+                        },
+                        {
+                            name:'返回线索数量',
+                            type:'line',
+                            smooth:false,
+                            data:resultAmount,
+                            markPoint : {
+                                data : [
+                                    {type : 'max', name: '最大值'},
+                                    {type : 'min', name: '最小值'}
+                                ]
+                            },
+                            markLine : {
+                                data : [
+                                    {type : 'average', name: '平均值'}
+                                ]
+                            },
+                           // itemStyle:{ normal: {label : {show: true}}}
+
+
+                        }
+                    ],
+
+                };
+
+
+                // 使用刚指定的配置项和数据显示图表。
+                myChart1.setOption(option);
+
+            }
+        });
+    });
+
+
+    //浏览器大小改变时重置大小
+    window.onresize = function () {
+        myChartContainer();
+        myChart1.resize();
+    };
+
+
+</script>
+</body>
+</html>

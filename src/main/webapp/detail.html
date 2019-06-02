@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+<head>
+        <meta charset="utf-8">
+        <title>公司详细数据</title>
+        <link rel="stylesheet" href="/layui/css/layui.css" media="all">
+    <script src="/layui/jquery.min.js"></script>
+        <script type="text/javascript">
+
+
+        </script>
+    </head>
+<body>
+<div class="layui-form-pane" style="margin-top: 15px;">
+    <div class="layui-form-item">
+        <label class="layui-form-label">范围选择</label>
+        <div class="layui-input-inline">
+            <input class="layui-input laydate-icon" placeholder="起始日期" id="stardate">
+        </div>
+        <div class="layui-input-inline">
+            <input class="layui-input laydate-icon" placeholder="截止日期"  id="enddate">
+        </div>
+        <div class="layui-input-inline">
+            <div class="layui-form" lay-filter="test2" style="width:270px">
+                <label class="layui-form-label">公司详情</label>
+                <div class="layui-input-block">
+                    <select name="comname" lay-filter="company" id="comname" lay-search="">
+
+
+
+                    </select>
+                </div>
+                </div>
+            </div>
+    </div>
+</div>
+<table id='main' class="layui-table" lay-data="{fixed:true,height:'full-10',cellMinWidth: 80, url:'/incrmt/getAll.action', page:true,limit:150, limits:[150,300,450,600],id:'test'}" lay-filter="test">
+    <thead>
+    <tr>
+        <th lay-data="{field:'id',fixed:'left'}">编号</th>
+        <th lay-data="{field:'name'}">网站名称</th>
+        <th lay-data="{field:'incrementList', sort: true}">列表增量</th>
+        <th lay-data="{field:'incrementDetail',sort: true}">详情增量</th>
+        <th lay-data="{field:'updateListNumber',sort: true}">列表更新量</th>
+        <th lay-data="{field:'updateDetailNum',sort: true}">详情更新量</th>
+        <th lay-data="{field:'number',sort: true}">列表抓取总量</th>
+        <th lay-data="{field:'detNum', sort: true}">详情抓取总量</th>
+        <th lay-data="{field:'createTime',sort: true}">创建时间</th>
+
+        <!--<th lay-data="{field:'wealth', width:135, sort: true}">财富</th>-->
+    </tr>
+    </thead>
+</table>
+
+<script src="/layui/layui.js"></script>
+<script type="text/javascript" src="layui/layui.all.js"></script>
+<script>
+    var table;
+    layui.use('table', function(){
+        table = layui.table;
+    });
+
+    var stardate="";
+    var enddate="";
+    var comname="";
+    layui.use('laydate', function(){
+        var laydate = layui.laydate;
+
+        //执行一个laydate实例
+        laydate.render({
+            elem: '#stardate', //指定元素
+            done:function(value){
+
+                stardate=value;
+
+            }
+        });
+    });
+    layui.use('laydate', function(){
+        var laydate = layui.laydate;
+
+        //执行一个laydate实例
+        laydate.render({
+            elem: '#enddate', //指定元素
+            done:function(value){
+                enddate=value;
+                table.render({
+                    elem:'#main',
+                    height:'full-10',
+                    cellMinWidth: 80,
+                    url:'/incrmt/getDetail.action?start='+stardate+'&end='+enddate+'&name='+comname,
+                    cols:[[
+                        {field:'id',title:'编号',fixed:'left'},{field:'name', width:120,title:'网站名称'},
+                        {field:'incrementList', sort: true,title:'列表增量'},
+                        {field:'incrementDetail', sort: true,title:'详情增量'},
+                        {field:'updateListNumber', sort: true,title:'列表更新量'},
+                        {field:'updateDetailNum', sort: true,title:'详情更新量'},
+                        {field:'number', sort: true,title:'列表抓取总量'},
+                        {field:'detNum', sort: true,title:'详情抓取总量'},
+                        {field:'createTime',  sort: true,title:'创建时间'}
+
+                    ]],
+                    page:true,
+                    limit:150,
+                    limits:[150,300,600,800]
+                });
+            }
+        });
+    });
+    var jsondt;
+    var str="";
+
+    $.ajax({
+        url:'/comname/getAllName.action',
+        type:'post',
+        dataType:'json',
+        async:false,
+        success:function(data){
+
+            jsondt=data;
+        }
+    });
+        str+='<option value="">直接选择或搜索选择</option>'
+    for(var i=0;i<jsondt.length;i++){
+            var comname1=jsondt[i].name;
+            if(comname1.indexOf("+")!=-1){
+                var value1=comname1.replace("+","%2B")
+                str+='<option value="'+value1+'">'+jsondt[i].name+'</option>'
+            }else{
+                str+='<option value="'+jsondt[i].name+'">'+jsondt[i].name+'</option>'
+            }
+
+    };
+
+
+
+    document.getElementById("comname").innerHTML=str;
+    var form=layui.form;
+    form.render('select', 'test2');
+
+    form.on('select', function(data){
+        comname=data.value;
+        table.render({
+            elem:'#main',
+            url:'/incrmt/getDetail.action?start='+stardate+'&end='+enddate+'&name='+comname,
+            height:'full-10',
+            cellMinWidth: 80,
+            cols:[[
+                {field:'id',title:'编号',fixed:'left'},{field:'name', width:120,title:'网站名称'},
+                {field:'incrementList', sort: true,title:'列表增量'},
+                {field:'incrementDetail',sort: true,title:'详情增量'},
+                {field:'updateListNumber', sort: true,title:'列表更新量'},
+                {field:'updateDetailNum', sort: true,title:'详情更新量'},
+                {field:'number', sort: true,title:'列表抓取总量'},
+                {field:'detNum',  sort: true,title:'详情抓取总量'},
+                {field:'createTime',  sort: true,title:'创建时间'}
+
+            ]],
+            page:true,
+            limit:150,
+            limits:[150,300,600,800]
+        });
+
+    });
+
+
+
+
+
+</script>
+</body>
+</html>

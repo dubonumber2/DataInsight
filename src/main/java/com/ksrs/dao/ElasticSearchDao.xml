@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.ksrs.dao.ElasticSearchDao">
+    <resultMap id="esutil" type="com.ksrs.entity.ElasticSearchEntity">
+        <result column="province" property="province"></result>
+        <result column="have_telephone" property="haveTelephone"></result>
+        <result column="have_all" property="telePhoneAndCellPhone"></result>
+        <result column="have_cellphone" property="haveCellphone"></result>
+        <result column="telephone_count" property="telephoneCount"></result>
+        <result column="cellphone_count" property="cellphoneCount"></result>
+        <result column="badTelephone_count" property="badTelephoneCount"></result>
+        <result column="badCellphone_count" property="badCellphoneCount"></result>
+        <result column="count_time" property="countTime"></result>
+    </resultMap>
+    <select id="getNews" resultMap="esutil">
+        select * from cluemining_elasticsearch
+        order by "count_time" desc limit 31 offset 0
+    </select>
+</mapper>

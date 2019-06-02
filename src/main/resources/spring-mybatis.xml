@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
+
+       xmlns:aop="http://www.springframework.org/schema/aop"
+
+       xsi:schemaLocation="http://www.springframework.org/schema/beans  
+                        http://www.springframework.org/schema/beans/spring-beans-3.1.xsd  
+                        http://www.springframework.org/schema/context  
+                        http://www.springframework.org/schema/context/spring-context-3.1.xsd  
+                        http://www.springframework.org/schema/tx  
+
+                        http://www.springframework.org/schema/tx/spring-tx.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+                        http://www.springframework.org/schema/aop
+                        http://www.springframework.org/schema/aop/spring-aop.xsd ">
+    <!-- 自动扫描 -->
+    <context:component-scan base-package="com.ksrs.*"/>
+
+    <!-- 第一种方式：加载一个properties文件 -->
+    <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="location" value="classpath:jdbc.properties"/>
+    </bean>
+
+
+    <!-- 第二种方式：加载多个properties文件  
+    <bean id="configProperties" class="org.springframework.beans.factory.config.PropertiesFactoryBean">  
+        <property name="locations">  
+            <list>  
+                <value>classpath:jdbc.properties</value>  
+                <value>classpath:common.properties</value>  
+            </list>  
+        </property>  
+        <property name="fileEncoding" value="UTF-8"/>  
+    </bean>  
+    <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PreferencesPlaceholderConfigurer">  
+        <property name="properties" ref="configProperties"/>  
+    </bean>  
+    -->
+
+    <!-- 配置数据源 -->
+    <bean name="dataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
+        <property name="name" value="${db.name}" />
+        <property name="driverClassName" value="com.mysql.jdbc.Driver" />
+        <!-- 基本属性 url、user、password -->
+        <property name="url" value="${db.url}" />
+        <property name="username" value="${db.username}" />
+        <property name="password" value="${db.password}" />
+        <!-- 配置初始化大小、最小、最大 -->
+        <property name="initialSize" value="${db.initialSize}" />
+        <property name="minIdle" value="${db.minIdle}" />
+        <property name="maxActive" value="${db.maxActive}" />
+        <!-- 配置获取连接等待超时的时间 -->
+        <property name="maxWait" value="${db.maxWait}" />
+        <!-- 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒 -->
+        <property name="timeBetweenEvictionRunsMillis" value="${db.timeBetweenEvictionRunsMillis}" />
+        <!-- 配置一个连接在池中最小生存的时间，单位是毫秒 -->
+        <property name="minEvictableIdleTimeMillis" value="${db.minEvictableIdleTimeMillis}" />
+        <property name="validationQuery" value="${db.validationQuery}" />
+        <property name="testWhileIdle" value="${db.testWhileIdle}" />
+        <property name="testOnBorrow" value="${db.testOnBorrow}" />
+        <property name="testOnReturn" value="${db.testOnReturn}" />
+        <!-- 打开PSCache，并且指定每个连接上PSCache的大小 -->
+        <property name="poolPreparedStatements" value="${db.poolPreparedStatements}" />
+        <property name="maxPoolPreparedStatementPerConnectionSize" value="${db.maxPoolPreparedStatementPerConnectionSize}" />
+        <property name="removeAbandoned" value="${db.removeAbandoned}" />
+        <property name="removeAbandonedTimeout" value="${db.removeAbandonedTimeout}" />
+        <property name="logAbandoned" value="${db.logAbandoned}" />
+        <!--<property name="exceptionSorter" value="" />-->
+        <!-- 配置监控统计拦截的filters -->
+        <property name="filters" value="${db.filters}" />
+    </bean>
+
+
+    <bean id="dataSource2" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
+        <property name="name" value="db" />
+        <property name="driverClassName" value="org.postgresql.Driver" />
+        <!-- 基本属性 url、user、password -->
+        <property name="url" value="jdbc:postgresql://10.0.0.221:5432/bpms_db"/>
+        <property name="username" value="postgres" />
+        <property name="password" value="postgres" />
+        <!-- 配置初始化大小、最小、最大 -->
+        <property name="initialSize" value="${db.initialSize}" />
+        <property name="minIdle" value="${db.minIdle}" />
+        <property name="maxActive" value="${db.maxActive}" />
+        <!-- 配置获取连接等待超时的时间 -->
+        <property name="maxWait" value="${db.maxWait}" />
+        <!-- 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒 -->
+        <property name="timeBetweenEvictionRunsMillis" value="${db.timeBetweenEvictionRunsMillis}" />
+        <!-- 配置一个连接在池中最小生存的时间，单位是毫秒 -->
+        <property name="minEvictableIdleTimeMillis" value="${db.minEvictableIdleTimeMillis}" />
+        <property name="validationQuery" value="${db.validationQuery}" />
+        <property name="testWhileIdle" value="${db.testWhileIdle}" />
+        <property name="testOnBorrow" value="${db.testOnBorrow}" />
+        <property name="testOnReturn" value="${db.testOnReturn}" />
+        <!-- 打开PSCache，并且指定每个连接上PSCache的大小 -->
+        <property name="poolPreparedStatements" value="${db.poolPreparedStatements}" />
+        <property name="maxPoolPreparedStatementPerConnectionSize" value="${db.maxPoolPreparedStatementPerConnectionSize}" />
+        <property name="removeAbandoned" value="${db.removeAbandoned}" />
+        <property name="removeAbandonedTimeout" value="${db.removeAbandonedTimeout}" />
+        <property name="logAbandoned" value="${db.logAbandoned}" />
+        <!--<property name="exceptionSorter" value="" />-->
+        <!-- 配置监控统计拦截的filters -->
+        <property name="filters" value="${db.filters}" />
+
+    </bean>
+   <!-- <bean id="dataSource3" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
+        <property name="name" value="db2" />
+        <property name="driverClassName" value="org.postgresql.Driver" />
+        &lt;!&ndash; 基本属性 url、user、password &ndash;&gt;
+        <property name="url" value="jdbc:postgresql://10.0.0.40:5432/data_insight"/>
+        <property name="username" value="bpms_user" />
+        <property name="password" value="bpms_user" />
+        &lt;!&ndash; 配置初始化大小、最小、最大 &ndash;&gt;
+        <property name="initialSize" value="${db.initialSize}" />
+        <property name="minIdle" value="${db.minIdle}" />
+        <property name="maxActive" value="${db.maxActive}" />
+        &lt;!&ndash; 配置获取连接等待超时的时间 &ndash;&gt;
+        <property name="maxWait" value="${db.maxWait}" />
+        &lt;!&ndash; 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒 &ndash;&gt;
+        <property name="timeBetweenEvictionRunsMillis" value="${db.timeBetweenEvictionRunsMillis}" />
+        &lt;!&ndash; 配置一个连接在池中最小生存的时间，单位是毫秒 &ndash;&gt;
+        <property name="minEvictableIdleTimeMillis" value="${db.minEvictableIdleTimeMillis}" />
+        <property name="validationQuery" value="${db.validationQuery}" />
+        <property name="testWhileIdle" value="${db.testWhileIdle}" />
+        <property name="testOnBorrow" value="${db.testOnBorrow}" />
+        <property name="testOnReturn" value="${db.testOnReturn}" />
+        &lt;!&ndash; 打开PSCache，并且指定每个连接上PSCache的大小 &ndash;&gt;
+        <property name="poolPreparedStatements" value="${db.poolPreparedStatements}" />
+        <property name="maxPoolPreparedStatementPerConnectionSize" value="${db.maxPoolPreparedStatementPerConnectionSize}" />
+        <property name="removeAbandoned" value="${db.removeAbandoned}" />
+        <property name="removeAbandonedTimeout" value="${db.removeAbandonedTimeout}" />
+        <property name="logAbandoned" value="${db.logAbandoned}" />
+        &lt;!&ndash;<property name="exceptionSorter" value="" />&ndash;&gt;
+        &lt;!&ndash; 配置监控统计拦截的filters &ndash;&gt;
+        <property name="filters" value="${db.filters}" />
+
+    </bean>-->
+    <bean id="dataSource4" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
+        <property name="name" value="db3" />
+        <property name="driverClassName" value="org.postgresql.Driver" />
+        <!-- 基本属性 url、user、password -->
+        <property name="url" value="jdbc:postgresql://10.0.0.221:5432/data_insight"/>
+        <property name="username" value="postgres" />
+        <property name="password" value="postgres" />
+        <!-- 配置初始化大小、最小、最大 -->
+        <property name="initialSize" value="${db.initialSize}" />
+        <property name="minIdle" value="${db.minIdle}" />
+        <property name="maxActive" value="${db.maxActive}" />
+        <!-- 配置获取连接等待超时的时间 -->
+        <property name="maxWait" value="${db.maxWait}" />
+        <!-- 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒 -->
+        <property name="timeBetweenEvictionRunsMillis" value="${db.timeBetweenEvictionRunsMillis}" />
+        <!-- 配置一个连接在池中最小生存的时间，单位是毫秒 -->
+        <property name="minEvictableIdleTimeMillis" value="${db.minEvictableIdleTimeMillis}" />
+        <property name="validationQuery" value="${db.validationQuery}" />
+        <property name="testWhileIdle" value="${db.testWhileIdle}" />
+        <property name="testOnBorrow" value="${db.testOnBorrow}" />
+        <property name="testOnReturn" value="${db.testOnReturn}" />
+        <!-- 打开PSCache，并且指定每个连接上PSCache的大小 -->
+        <property name="poolPreparedStatements" value="${db.poolPreparedStatements}" />
+        <property name="maxPoolPreparedStatementPerConnectionSize" value="${db.maxPoolPreparedStatementPerConnectionSize}" />
+        <property name="removeAbandoned" value="${db.removeAbandoned}" />
+        <property name="removeAbandonedTimeout" value="${db.removeAbandonedTimeout}" />
+        <property name="logAbandoned" value="${db.logAbandoned}" />
+        <!--<property name="exceptionSorter" value="" />-->
+        <!-- 配置监控统计拦截的filters -->
+        <property name="filters" value="${db.filters}" />
+
+    </bean>
+    <bean id="dynamicDataSource" class="com.ksrs.utils.DynamicDataSource">
+             <property name="targetDataSources">
+                 <map key-type="java.lang.String">
+                     <!-- 指定lookupKey和与之对应的数据源 -->
+                     <entry key="dataSource" value-ref="dataSource"></entry>
+                     <entry key="dataSource2" value-ref="dataSource2"></entry>
+                   <!--  <entry key="dataSource3" value-ref="dataSource3"></entry>-->
+                     <entry key="dataSource4" value-ref="dataSource4"></entry>
+                 </map>
+             </property>
+             <!-- 这里可以指定默认的数据源 -->
+             <property name="defaultTargetDataSource" ref="dataSource" />
+         </bean>
+
+    <bean id="dataSourceAspect" class="com.ksrs.utils.DataSourceAspect"/>
+
+             <aop:config>
+             <aop:aspect ref="dataSourceAspect">
+                 <!--拦截所有service方法-->
+                 <aop:pointcut id="dataSourcePointcut" expression="execution(* com.ksrs.service..*.*(..))"/>
+                 <aop:before pointcut-ref="dataSourcePointcut" method="intercept" />
+            </aop:aspect>
+            </aop:config>
+
+
+
+    <!-- mybatis和spring完美整合，不需要mybatis的配置映射文件 -->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dynamicDataSource"/>
+
+        <!-- 自动扫描mapping.xml文件 -->
+        <property name="mapperLocations" value="classpath:com/ksrs/dao/*.xml"></property>
+    </bean>
+
+    <!-- DAO接口所在包名，Spring会自动查找其下的类 -->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="com.ksrs.dao"/>
+        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"></property>
+    </bean>
+
+
+    <!-- (事务管理)transaction manager, use JtaTransactionManager for global tx -->
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+
+        <property name="dataSource" ref="dynamicDataSource"/>
+    </bean>
+
+   <!-- &lt;!&ndash; (事务管理)transaction manager, use JtaTransactionManager for global tx &ndash;&gt;-->
+
+    <tx:advice id="txAdvice" transaction-manager="transactionManager">
+        <tx:attributes>
+            <tx:method name="add*" propagation="REQUIRED" rollback-for="Exception" />
+            <tx:method name="save*" propagation="REQUIRED" rollback-for="Exception" />
+            <tx:method name="insert*" propagation="REQUIRED" rollback-for="Exception" />
+            <tx:method name="update*" propagation="REQUIRED" rollback-for="Exception" />
+            <tx:method name="edit*" propagation="REQUIRED" rollback-for="Exception" />
+            <tx:method name="modify*" propagation="REQUIRED" rollback-for="Exception" />
+            <tx:method name="delete*" propagation="REQUIRED" rollback-for="Exception" />
+            <tx:method name="remove*" propagation="REQUIRED" rollback-for="Exception" />
+            <tx:method name="repair*" propagation="REQUIRED" rollback-for="Exception" />
+            <tx:method name="delAndRepair*" propagation="REQUIRED" rollback-for="Exception" />
+            <tx:method name="get*" propagation="SUPPORTS" rollback-for="Exception" />
+            <tx:method name="find*" propagation="SUPPORTS" rollback-for="Exception" />
+            <tx:method name="load*" propagation="SUPPORTS" rollback-for="Exception" />
+            <tx:method name="search*" propagation="SUPPORTS" rollback-for="Exception" />
+            <tx:method name="datagrid*" propagation="SUPPORTS" rollback-for="Exception" />
+            <tx:method name="*" propagation="NOT_SUPPORTED" read-only="true" />
+        </tx:attributes>
+    </tx:advice>
+    <aop:config>
+        <aop:pointcut id="interceptorPointCuts" expression="execution(* com.ksrs.*.service.*Service.*(..))" />
+        <aop:advisor advice-ref="txAdvice" pointcut-ref="interceptorPointCuts" />
+    </aop:config>
+</beans>  

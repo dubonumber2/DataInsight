@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>新增解析数据源</title>
+    <link rel="stylesheet" href="/layui/css/layui.css" media="all">
+    <script src="/layui/jquery.min.js"></script>
+    <script src="/layui/layui.js"></script>
+    <script type="text/javascript" src="layui/layui.all.js"></script>
+</head>
+<body>
+<form class="layui-form"> <!-- 提示：如果你不想用form，你可以换成div等任何一个普通元素 -->
+    <div class="layui-form-item">
+        <label class="layui-form-label">数据源</label>
+        <div class="layui-input-block">
+            <input type="text" name="name"  lay-verify="name" placeholder="请输入" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">添加描述</label>
+        <div class="layui-input-block">
+            <input type="text" name="describe"  lay-verify="name1" placeholder="请输入" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button class="layui-btn" lay-submit lay-filter="*">立即提交</button>
+            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+        </div>
+    </div>
+</form>
+<script>
+    layui.use(['form','layedit'], function(){
+        var form = layui.form;
+
+        form.verify({
+            name: function (value) {
+
+                if(!(value.indexOf("_")>-1)){
+                    return '请按parser_*_parser正确命名(请与解析日志的命名保持一致)';
+                }
+            },
+
+           name1:[/(.+){1,12}$/,'请添加描述']
+
+
+        });
+
+        form.on('submit(*)', function(data){
+            $.ajax({
+                url:'/comname/insertJxDataSource.action',
+                dataType:'text',
+                async:false,
+                type:'post',
+                data:data.field,
+                success:function (data) {
+
+                    if(data==='success'){
+                      layer.alert('添加成功',{
+                          skin: 'layui-layer-molv' //样式类名
+                          ,closeBtn: 0,
+
+                      },function (index) {
+                          layer.close(index);
+                          var index1 = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+                          parent.layer.close(index1); //再执行关闭
+
+                      });
+                    }else if(data==='faile'){
+                        layer.alert('添加失败，该数据源已存在',{
+                            skin: 'layui-layer-lan' //样式类名
+                            ,closeBtn: 0,
+
+                        });
+                    }else{
+                        layer.alert('服务器发生异常，添加失败',{
+                            skin: 'layui-layer-lan' //样式类名
+                            ,closeBtn: 0,
+
+                        });
+                    }
+                }
+
+            });
+            return false;
+        });
+    });
+</script>
+</body>
+</html>

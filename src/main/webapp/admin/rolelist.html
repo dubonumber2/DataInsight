@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="/layui/css/layui.css" media="all">
+    <script src="/layui/jquery.min.js"></script>
+    <script src="/layui/layui.all.js"></script>
+</head>
+<body>
+<div style="width: 200px;height: 300px">
+<div class="layui-input-inline">
+
+    <div class="layui-form" lay-filter="test2">
+
+        <label class="layui-form-label">选择角色</label>
+        <div class="layui-input-block">
+            <select name="rolename" lay-filter="rolename" id="rolename" lay-search="">
+
+
+            </select>
+        </div>
+    </div>
+    </div>
+</div>
+<script type="text/javascript">
+    var str="";
+    var jsondt;
+    $.ajax({
+        url:'/role/getlist.action',
+        type:'post',
+        dataType:'json',
+        async:false,
+        success:function(data){
+
+            jsondt=data;
+        }
+    });
+    str+='<option value="">选择角色</option>'
+    for(var i=0;i<jsondt.length;i++){
+        str+='<option value="'+jsondt[i].rolename+'">'+jsondt[i].rolename+'</option>'
+
+    };
+
+
+
+    document.getElementById("rolename").innerHTML=str;
+    var form=layui.form;
+    var rolename="";
+    var id;
+    form.on('select', function(data) {
+
+        rolename = data.value;
+
+    })
+    form.render('select', 'test2');
+</script>
+</body>
+</html>

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+        <meta charset="utf-8">
+        <title>公司详细数据</title>
+        <link rel="stylesheet" href="/layui/css/layui.css" media="all">
+    <script src="/layui/jquery.min.js"></script>
+        <script type="text/javascript">
+
+
+        </script>
+    </head>
+<body>
+<div class="layui-form-pane" style="margin-top: 15px;">
+    <div class="layui-form-item">
+        <label class="layui-form-label">范围选择</label>
+       <!-- <div class="layui-input-inline">
+            <input class="layui-input laydate-icon" placeholder="起始日期" id="stardate">
+        </div>-->
+        <div class="layui-input-inline">
+            <input class="layui-input laydate-icon" placeholder="选择日期"  id="enddate">
+        </div>
+        <div class="layui-input-inline">
+            <button class="layui-btn" id="button1">点击下载</button>
+        </div>
+    </div>
+</div>
+<table id='main' class="layui-table" lay-data="{fixed:true,height:'full-10',cellMinWidth: 80, url:'/mongo/getDate.action', page:false,limit:300, limits:[300,600,900,1200],id:'test'}" lay-filter="test">
+    <thead>
+    <tr>
+
+        <th lay-data="{field:'type',event:'test'}">数据源</th>
+        <th lay-data="{field:'mongoCount', sort: true}">MongoDB总量</th>
+        <th lay-data="{field:'mysqlCount',sort: true}">Mysql总量</th>
+        <th lay-data="{field:'mongoIncrement',sort: true}">MongoDB增量</th>
+        <th lay-data="{field:'mysqlIncrement',sort: true}">Mysql增量</th>
+        <th lay-data="{field:'errorCount',sort: true}">增量的误差数</th>
+        <th lay-data="{field:'mongoNewTime',sort: true}">Mongo最新时间</th>
+        <th lay-data="{field:'overTime',sort: true}">统计时间</th>
+
+
+        <!--<th lay-data="{field:'wealth', width:135, sort: true}">财富</th>-->
+    </tr>
+    </thead>
+</table>
+
+<script src="/layui/layui.js"></script>
+<script type="text/javascript" src="layui/layui.all.js"></script>
+<script type="application/javascript" src="js/mongoTable.js"></script>
+
+</body>
+</html>

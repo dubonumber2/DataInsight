@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "mybatis-3-mapper.dtd">
+        <mapper namespace="com.ksrs.dao.Statistics_hzDao">
+            <select id="getData" resultType="com.ksrs.entity.Statistics_hz">
+                select  "total" as total,to_char("total_cov"*100,'990.99%') as total_cov,"complete_data" ,to_char("complete_data_cov"*100,'990.99%') as complete_data_cov
+                ,"normal_total",to_char("normal_total_cov"*100,'990.99%') as normal_total_cov,
+                "nor_com_data",to_char("nor_com_data_cov"*100,'990.99%') as nor_com_data_cov,
+                "active_data",to_char("active_data_cov"*100,'990.99%') as active_data_cov,"sale_data",to_char("sale_data_cov"*100,'990.99%') as sale_data_cov,
+                "countTime" from statistics_hz where "countTime" = to_date(#{endDate},'yyyy-MM-dd') and "dataType"='zl'
+            </select>
+    <select id="getQyData" resultType="com.ksrs.entity.Statistics_hz">
+        select  "total" as total,to_char("total_cov"*100,'990.99%') as total_cov,"complete_data" ,to_char("complete_data_cov"*100,'990.99%') as complete_data_cov
+        ,"normal_total",to_char("normal_total_cov"*100,'990.99%') as normal_total_cov,
+        "nor_com_data",to_char("nor_com_data_cov"*100,'990.99%') as nor_com_data_cov,
+        "active_data",to_char("active_data_cov"*100,'990.99%') as active_data_cov,"sale_data",to_char("sale_data_cov"*100,'990.99%') as sale_data_cov,
+        "countTime"
+        from statistics_hz where "countTime" = to_date(#{endDate},'yyyy-MM-dd') and "dataType"='qy'
+    </select>
+</mapper>

@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "mybatis-3-mapper.dtd">
+<mapper namespace="com.ksrs.dao.LogsModelDao">
+    <select id="getDefault" resultType="com.ksrs.entity.LogsModel">
+        SELECT ds."describe" as dataSource,sum(si."sendHttpCounts") as httpCounts,sum(si."sendVisitCounts") as zqCounts,sum(se.list_update_count)+sum(se.list_page_count)+sum(se.detail_page_count) as yxCounts,si."countTime" as countTime FROM "public"."statistics_ip" si left join statistics_effective se on si."dataSource"=se.logs left join "dataSource" ds on split_part(si."dataSource",'_',2)||'_'||split_part(si."dataSource",'_',3 )=ds."dataSource"  where si."countTime" between to_date(#{starDate},'yyyy-MM-dd') and to_date(#{endDate},'yyyy-MM-dd')
+        group by ds."describe",si."countTime"
+        limit #{pageSize} offset #{start}
+
+    </select>
+    <select id="getTotal" resultType="java.lang.Integer">
+        SELECT count(*) FROM "public"."statistics_ip" si left join statistics_effective se on si."dataSource"=se.logs where si."countTime" between to_date(#{starDate},'yyyy-MM-dd') and to_date(#{endDate},'yyyy-MM-dd')
+    </select>
+    <select id="getByName" parameterType="java.util.Map" resultType="com.ksrs.entity.LogsModel">
+        SELECT ds."describe" as dataSource,sum(si."sendHttpCounts") as httpCounts,sum(si."sendVisitCounts") as zqCounts,sum(se.list_update_count)+sum(se.list_page_count)+sum(se.detail_page_count) as yxCounts,si."countTime" as countTime FROM "public"."statistics_ip" si left join statistics_effective se on si."dataSource"=se.logs left join "dataSource" ds on split_part(si."dataSource",'_',2)||'_'||split_part(si."dataSource",'_',3 )=ds."dataSource"
+        <where>
+            <if test="starDate!=null and starDate.length()>0 and endDate!=null and endDate.length()>0">
+                    si."countTime" between to_date(#{starDate},'yyyy-MM-dd') and to_date(#{endDate},'yyyy-MM-dd')
+            </if>
+            <if test="comName!=null and comName.length()>0">
+                and ds."describe" =#{comName}
+            </if>
+        </where>
+        group by ds."describe",si."countTime"
+      order by si."countTime" desc limit #{pageSize} offset #{start}
+
+    </select>
+    <select id="getByNameTotal" parameterType="java.util.Map" resultType="java.lang.Integer">
+        SELECT count(*) FROM "public"."statistics_ip" si left join statistics_effective se on si."dataSource"=se.logs
+        <where>
+            <if test="starDate!=null and starDate.length()>0 and endDate!=null and endDate.length()>0">
+                si."countTime" between to_date(#{starDate},'yyyy-MM-dd') and to_date(#{endDate},'yyyy-MM-dd')
+            </if>
+            <if test="comName!=null and comName.length()>0">
+                and si."dataSource" like '%${comName}%'
+            </if>
+        </where>
+
+
+
+    </select>
+    <select id="getByName1" parameterType="java.util.Map" resultType="com.ksrs.entity.LogsModel">
+        SELECT ds."describe" as dataSource,sum(si."sendHttpCounts") as httpCounts,sum(si."sendVisitCounts") as zqCounts,sum(se.list_update_count)+sum(se.list_page_count)+sum(se.detail_page_count) as yxCounts,si."countTime" as countTime FROM "public"."statistics_ip" si left join statistics_effective se on si."dataSource"=se.logs left join "dataSource" ds on split_part(si."dataSource",'_',2)||'_'||split_part(si."dataSource",'_',3 )=ds."dataSource"
+        <where>
+            <if test="starDate!=null and starDate.length()>0 and endDate!=null and endDate.length()>0">
+                si."countTime" between to_date(#{starDate},'yyyy-MM-dd') and to_date(#{endDate},'yyyy-MM-dd')
+            </if>
+            <if test="comName!=null and comName.length()>0">
+                and ds."describe"=#{comName}
+            </if>
+        </where>
+        group by ds."describe",si."countTime"  order by si."countTime"
+
+    </select>
+
+    <select id="getJxDefault" resultType="com.ksrs.entity.LogsModel" parameterType="java.util.Map">
+        SELECT jx."describe" as dataSource,sum(si.parsecounts) as httpCounts,sum(si.parsesuccess) as zqCounts,sum(si.parsepagecounts) as yxxqCounts,si."countTime" as countTime FROM "public"."statistics_parse" si left join "jxdataSource" jx on substr(split_part(si."dataSource",'.',4), strpos(split_part(si."dataSource",'.',4), 'p')) = jx."jxdatasource"  <where>
+        <if test="starDate!=null and starDate.length()>0 and endDate!=null and endDate.length()>0">
+            si."countTime" between to_date(#{starDate},'yyyy-MM-dd') and to_date(#{endDate},'yyyy-MM-dd')
+        </if>
+        <if test="comName!=null and comName.length()>0">
+            and  jx."describe" =#{comName}
+        </if>
+        group by jx."describe",si."countTime" having jx."describe"&lt;&gt;'' order by si."countTime" desc
+       limit #{pageSize} offset #{start}
+    </where>
+    </select>
+    <select id="getJxDefaultTotal"  resultType="java.lang.Integer" parameterType="java.util.Map">
+        SELECT count(*) FROM "public"."statistics_parse" si
+        <where>
+          <if test="starDate!=null and starDate.length()>0 and endDate!=null and endDate.length()>0">
+              si."countTime" between to_date(#{starDate},'yyyy-MM-dd') and to_date(#{endDate},'yyyy-MM-dd')
+          </if>
+            <if test="comName!=null and comName.length()>0">
+                and  si."dataSource" like '%${comName}%'
+            </if>
+
+        </where>
+
+
+
+    </select>
+    <select id="getJxDefault1" resultType="com.ksrs.entity.LogsModel" parameterType="java.util.Map">
+        SELECT jx."describe",sum(si.parsecounts) as httpCounts,sum(si.parsesuccess) as zqCounts,sum(si.parsepagecounts) as yxxqCounts,si."countTime" as countTime FROM "public"."statistics_parse" si left join "jxdataSource" jx on substr(split_part(si."dataSource",'.',4), strpos(split_part(si."dataSource",'.',4), 'p')) = jx."jxdatasource" <where>
+        <if test="starDate!=null and starDate.length()>0 and endDate!=null and endDate.length()>0">
+            si."countTime" between to_date(#{starDate},'yyyy-MM-dd') and to_date(#{endDate},'yyyy-MM-dd')
+        </if>
+        <if test="comName!=null and comName.length()>0">
+            and jx."describe"=#{comName}
+        </if>
+        group by jx."describe",si."countTime"    order by si."countTime"
+
+    </where>
+    </select>
+
+</mapper>

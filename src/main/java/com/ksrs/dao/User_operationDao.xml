@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.ksrs.dao.User_operationDao">
+    <select id="getByOpName" resultType="com.ksrs.entity.User_operation">
+        select cu.user_company as user_company,cu.realname as realname,cuo."user_name" as user_name,cuo."operation_name" as operation_name,cuo."operation_explain" as operation_explain,cuo."operation_time" as operation_time
+                from cluemining_user_operation cuo left join cluemining_user cu on trim(both '"' from cuo.user_name)=cu.user_name
+                <where>
+                    <if test="operation_time!=null and operation_time.length()>0 and end_time!=null and end_time.length()>0">
+                        to_date(cuo."operation_time",'yyyy-MM-dd') between to_date(#{operation_time},'yyyy-MM-dd') and to_date(#{end_time},'yyyy-MM-dd')
+                    </if>
+                    <if test="operation_name!=null and operation_name.length()>0">
+                       and cuo."operation_name"=#{operation_name}
+                    </if>
+                    <if test="user_name!=null and user_name.length()>0">
+                       and cuo.user_name like '%${user_name}%'
+                    </if>
+                    <if test="user_company!=null and user_company.length()>0">
+                        and cu.user_company=#{user_company}
+                    </if>
+                    <if test="realname!=null and realname.length()>0">
+                        and cu.realname like '%${realname}%'
+                    </if>
+                    <if test="user_type!=null and user_type.length()>0">
+                        and cu.user_type=#{user_type}
+                    </if>
+
+                </where>
+        limit #{page} offset #{pageSize}
+    </select>
+    <select id="getByDowload" resultType="com.ksrs.entity.User_operation">
+        select cu.user_company as user_company,cu.realname as realname,cuo."user_name" as user_name,cuo."operation_name" as operation_name,cuo."operation_explain" as operation_explain,cuo."operation_time" as operation_time,cuo."dowloadcount" as dowloadcount
+        from cluemining_user_operation cuo left join cluemining_user cu on trim(both '"' from cuo.user_name)=cu.user_name
+        <where>
+            <if test="operation_time!=null and operation_time.length()>0 and end_time!=null and end_time.length()>0">
+                to_date(cuo."operation_time",'yyyy-MM-dd') between to_date(#{operation_time},'yyyy-MM-dd') and to_date(#{end_time},'yyyy-MM-dd')
+            </if>
+            <if test="operation_name!=null and operation_name.length()>0">
+               and cuo."operation_name"=#{operation_name}
+            </if>
+            <if test="user_name!=null and user_name.length()>0">
+               and cuo.user_name like '%${user_name}%'
+            </if>
+            <if test="user_company!=null and user_company.length()>0">
+                and cu.user_company=#{user_company}
+            </if>
+            <if test="realname!=null and realname.length()>0">
+                and cu.realname like '%${realname}%'
+            </if>
+            <if test="user_type!=null and user_type.length()>0">
+                and cu.user_type=#{user_type}
+            </if>
+
+        </where>
+        union all
+        select '汇总' as "user_company",'--' as "realname",'--' as "user_name",'--' as "operation_name",'--' as "operation_explain",'--' as "operation_time",sum("dowloadcount") as "dowloadcount"
+        from cluemining_user_operation cuo left join cluemining_user cu on trim(both '"' from cuo.user_name)=cu.user_name
+        <where>
+            <if test="operation_time!=null and operation_time.length()>0 and end_time!=null and end_time.length()>0">
+                to_date(cuo."operation_time",'yyyy-MM-dd') between to_date(#{operation_time},'yyyy-MM-dd') and to_date(#{end_time},'yyyy-MM-dd')
+            </if>
+            <if test="operation_name!=null and operation_name.length()>0">
+              and  cuo."operation_name"=#{operation_name}
+            </if>
+            <if test="user_name!=null and user_name.length()>0">
+               and cuo.user_name like '%${user_name}%'
+            </if>
+            <if test="user_company!=null and user_company.length()>0">
+                and cu.user_company=#{user_company}
+            </if>
+            <if test="realname!=null and realname.length()>0">
+                and cu.realname like '%${realname}%'
+            </if>
+            <if test="user_type!=null and user_type.length()>0">
+                and cu.user_type=#{user_type}
+            </if>
+
+        </where>
+    </select>
+    <select id="getTotal" resultType="java.lang.Integer">
+        select count(*)
+        from cluemining_user_operation cuo left join cluemining_user cu on trim(both '"' from cuo.user_name)=cu.user_name
+        <where>
+            <if test="operation_time!=null and operation_time.length()>0 and end_time!=null and end_time.length()>0">
+                to_date(cuo."operation_time",'yyyy-MM-dd') between to_date(#{operation_time},'yyyy-MM-dd') and to_date(#{end_time},'yyyy-MM-dd')
+            </if>
+            <if test="operation_name!=null and operation_name.length()>0">
+                and cuo."operation_name"=#{operation_name}
+            </if>
+            <if test="user_name!=null and user_name.length()>0">
+                and cuo.user_name like '%${user_name}%'
+            </if>
+            <if test="user_company!=null and user_company.length()>0">
+                and cu.user_company=#{user_company}
+            </if>
+            <if test="realname!=null and realname.length()>0">
+                and cu.realname like '%${realname}%'
+            </if>
+            <if test="user_type!=null and user_type.length()>0">
+                and cu.user_type=#{user_type}
+            </if>
+
+        </where>
+    </select>
+    
+    <select id="getSum" resultType="com.ksrs.entity.User_operation">
+        select cu.user_company as user_company,cuo.operation_name as operation_name ,cu.realname as realname,cuo.user_name as user_name,sum(cuo.dowloadcount) as dowloadcount,count(*) as sumcount from cluemining_user_operation cuo LEFT JOIN cluemining_user cu on trim(BOTH '"' FROM cuo.user_name)=cu.user_name
+        <where>
+            <if test="user_company!=null and user_company.length()>0">
+                cu.user_company=#{user_company}
+            </if>
+        </where>
+
+         group
+        by cu.user_company,cuo.operation_name,cu.realname,cuo.user_name order by cu.user_company
+    </select>
+
+    <insert id="insertUser" parameterType="com.ksrs.entity.User_operation">
+        insert into cluemining_user ("realname","user_name","user_company","user_type") values(#{realname},#{user_name},#{user_company},#{user_type});
+    </insert>
+
+    <select id="getUser" resultType="com.ksrs.entity.User_operation">
+        select "user_company","realname","user_name","user_type" from cluemining_user order by id desc limit #{pageSize} offset #{page}
+    </select>
+    <select id="getUserTotal" resultType="java.lang.Integer">
+        select count(*) from cluemining_user
+    </select>
+</mapper>

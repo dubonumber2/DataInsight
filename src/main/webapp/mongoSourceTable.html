@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+        <meta charset="utf-8">
+        <title>数据字典维护</title>
+        <link rel="stylesheet" href="/layui/css/layui.css" media="all">
+    <script src="/layui/jquery.min.js"></script>
+        <script type="text/javascript">
+
+
+        </script>
+    </head>
+<body>
+<div class="layui-form-pane" style="margin-top: 15px;">
+
+
+
+        <div class="layui-input-inline">
+            <button class="layui-btn" id="button1">新增数据源</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<table id='main' class="layui-table" lay-data="{fixed:true,height:'full-10',cellMinWidth: 80, url:'/comname/getMongoSource.action',id:'test'}" lay-filter="test">
+    <thead>
+    <tr>
+
+        <th lay-data="{field:'at_title',event:'test'}">描述</th>
+        <th lay-data="{field:'at_type',sort: true}">数据源</th>
+        <th lay-data="{field:'at_mysql_table',event:'test'}">Mysql对应表名</th>
+        <th lay-data="{field:'at_mongodb_collection',sort: true}">MongoDB对应表名</th>
+        <th lay-data="{field:'at_mongodb_source',event:'test'}">mongoDB对应的Source</th>
+    </tr>
+    </thead>
+</table>
+<script src="/layui/layui.js"></script>
+<script type="text/javascript" src="layui/layui.all.js"></script>
+<script>
+
+    $('#button1').click(function(){
+         layer.open({
+            type: 2,
+            skin: 'layui-layer-rim', //加上边框
+            area: ['600px', '450px'], //宽高
+            content: '/mongoSourcewh.html',
+             end:function () {
+                 location.reload();
+             }
+        });
+
+
+    })
+
+</script>
+</body>
+</html>

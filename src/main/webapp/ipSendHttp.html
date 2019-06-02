@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>ECharts</title>
+    <!-- 引入 echarts.js -->
+    <script src="echarts.js"></script>
+    <link rel="stylesheet" href="/layui/css/layui.css" media="all">
+    <script src="/layui/jquery.min.js"></script>
+    <script src="/layui/macarons.js"></script>
+</head>
+<body>
+<!-- 为ECharts准备一个具备大小（宽高）的Dom -->
+<!--<div id="main" style="width: 500px;height:400px;position: relative;left: 0"></div>-->
+<div>
+    <label class="layui-form-label">范围选择</label>
+    <div class="layui-input-inline">
+        <input class="layui-input laydate-icon" placeholder="起始日期" id="startDate">
+    </div>
+    <div class="layui-input-inline">
+        <input class="layui-input laydate-icon" placeholder="截止日期"  id="endDate">
+    </div>
+
+    <div id="zhexian" style="width:950px;height: 400px;position: absolute;left:2%;top: 10%">
+
+    </div>
+</div>
+
+<script type="text/javascript" src="layui/layui.all.js"></script>
+<script src="/layui/layer.js"></script>
+<script type="text/javascript">
+
+
+
+
+
+
+    var date1;
+    var myChart1 = echarts.init(document.getElementById('zhexian'),'macarons');
+
+    $.ajax({
+        url:'/logsip/getIpSendHttp.action',
+        dataType:'json',
+        async:false,
+        type:'post',
+        success:function (data) {
+            date1=data;
+        }
+
+    });
+    var ipSendHttp=[];
+    var countTime=[];
+    for(var i=0;i<date1.length;i++){
+        ipSendHttp.push(date1[i].ipSendHttp);
+        countTime.push(date1[i].countTime);
+    }
+    option = {
+        tooltip: {
+            trigger: 'axis',
+            axisPointer: {
+                type: 'cross',
+                crossStyle: {
+                    color: '#999'
+                }
+            }
+        },
+        toolbox: {
+            feature: {
+                dataView: {show: true, readOnly: false},
+                magicType: {show: true, type: ['line', 'bar']},
+                restore: {show: true},
+                saveAsImage: {show: true}
+            }
+        },
+        legend: {
+            data:['代理ip请求次数','代理ip请求次数1']
+        },
+        xAxis: [
+            {
+                type: 'category',
+                data: countTime,
+                axisPointer: {
+                    type: 'shadow'
+                }
+            }
+        ],
+        yAxis: [
+            {
+                type: 'value',
+                name: '请求次数',
+                axisLabel: {
+                    formatter: '{value} '
+                }
+            }/*,
+            {
+                type: 'value',
+                name: '温度',
+                min: 0,
+                max: 25,
+                interval: 5,
+                axisLabel: {
+                    formatter: '{value} °C'
+                }
+            }*/
+        ],
+        series: [
+            {
+                name:'代理ip请求次数',
+                type:'bar',
+                data:ipSendHttp
+            },
+            {
+                name:'代理ip请求次数1',
+                type:'line',
+                data:ipSendHttp
+            }
+        ]
+    };
+    myChart1.setOption(option);
+</script>
+
+</body>
+</html>

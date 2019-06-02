@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.ksrs.dao.MongoStatisticsDao">
+    <select id="getAll" resultType="com.ksrs.entity.MongoStatistics">
+        select * from auto_transfer
+    </select>
+    <insert id="insertData" parameterType="com.ksrs.entity.MongoStatistics">
+        insert into auto_transfer("at_title","at_type","at_mysql_table","at_mongodb_collection","at_mongodb_source")
+        values(#{at_title},#{at_type},#{at_mysql_table},#{at_mongodb_collection},#{at_mongodb_source})
+    </insert>
+</mapper>

@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>ECharts</title>
+    <!-- 引入 echarts.js -->
+    <script src="echarts.js"></script>
+    <link rel="stylesheet" href="/layui/css/layui.css" media="all">
+    <script src="/layui/jquery.min.js"></script>
+    <script src="/layui/macarons.js"></script>
+</head>
+<body>
+<!-- 为ECharts准备一个具备大小（宽高）的Dom -->
+<!--<div id="main" style="width: 500px;height:400px;position: relative;left: 0"></div>-->
+<div>
+    <label class="layui-form-label">范围选择</label>
+    <div class="layui-input-inline">
+        <input class="layui-input laydate-icon" placeholder="起始日期" id="startDate">
+    </div>
+    <div class="layui-input-inline">
+        <input class="layui-input laydate-icon" placeholder="截止日期"  id="endDate">
+    </div>
+
+    <div id="zhexian" style="width:85%;height: 400px;position: absolute;left:2%;top: 10%">
+
+    </div>
+    <div id="zhexian1" style="width:85%;height: 400px;position: absolute;left:2%;top: 500px">
+
+    </div>
+    <div id="zhexian2" style="width:85%;height: 400px;position: absolute;left:2%;top: 1000px">
+
+    </div>
+</div>
+
+<script type="text/javascript" src="layui/layui.all.js"></script>
+<script src="/layui/layer.js"></script>
+<script type="text/javascript">
+
+
+
+
+
+
+    var date1;
+    var myChart1 = echarts.init(document.getElementById('zhexian'),'macarons');
+
+    $.ajax({
+        url:'/parser/getIpHttp.action',
+        dataType:'json',
+        async:false,
+        type:'post',
+        success:function (data) {
+            date1=data;
+        }
+
+    });
+    var icl=[];
+    var createTime=[];
+    for(var i=0;i<date1.length;i++){
+        icl.push(date1[i].parserSum);
+        createTime.push(date1[i].createTime);
+    }
+    option = {
+        title: {
+            text: '爬虫抓取详细统计',
+            subtext: '真实数据'
+        },
+        tooltip: {
+            trigger: 'axis'
+        },
+        legend: {
+            data:['日请求次数']
+        },
+        toolbox: {
+            show: true,
+            feature: {
+                dataZoom: {
+                    yAxisIndex: 'none'
+                },
+                dataView: {readOnly: false},
+                magicType: {type: ['line', 'bar']},
+                restore: {},
+                saveAsImage: {}
+            }
+        },
+        xAxis:  {
+            type: 'category',
+            boundaryGap: false,
+            data: createTime
+        },
+        yAxis: {
+            type: 'value',
+            axisLabel: {
+                formatter: '{value}'
+            }
+        },
+        series: [
+            {
+                name:'日请求次数',
+                type:'line',
+                data:icl,
+
+            }
+        ]
+    };
+
+
+    // 使用刚指定的配置项和数据显示图表。
+    myChart1.setOption(option);
+
+    var date1;
+    var myChart = echarts.init(document.getElementById('zhexian1'),'macarons');
+
+    $.ajax({
+        url:'/parser/getHttp.action?type=List',
+        dataType:'json',
+        async:false,
+        type:'post',
+        success:function (data) {
+            date1=data;
+        }
+
+    });
+    var icl=[];
+    var createTime=[];
+    for(var i=0;i<date1.length;i++){
+        icl.push(date1[i].parserSum);
+        createTime.push(date1[i].createTime);
+    }
+    option = {
+        title: {
+            text: '爬虫抓取详细统计',
+            subtext: '真实数据'
+        },
+        tooltip: {
+            trigger: 'axis'
+        },
+        legend: {
+            data:['列表日请求次数']
+        },
+        toolbox: {
+            show: true,
+            feature: {
+                dataZoom: {
+                    yAxisIndex: 'none'
+                },
+                dataView: {readOnly: false},
+                magicType: {type: [ 'line','bar']},
+                restore: {},
+                saveAsImage: {}
+            }
+        },
+        xAxis:  {
+            type: 'category',
+            boundaryGap: true,
+            data: createTime
+        },
+        yAxis: {
+            type: 'value',
+            axisLabel: {
+                formatter: '{value}'
+            }
+        },
+        series: [
+            {
+                name:'列表日请求次数',
+                type:'bar',
+                label: {
+                    normal: {
+                        show: true,
+                        position: 'insideRight'
+                    }
+                },
+                data:icl,
+
+            }
+        ]
+    };
+
+
+    // 使用刚指定的配置项和数据显示图表。
+    myChart.setOption(option);
+    var date1;
+    var myChart = echarts.init(document.getElementById('zhexian2'),'macarons');
+
+    $.ajax({
+        url:'/parser/getHttp.action?type=detail',
+        dataType:'json',
+        async:false,
+        type:'post',
+        success:function (data) {
+            date1=data;
+        }
+
+    });
+    var icl=[];
+    var createTime=[];
+    for(var i=0;i<date1.length;i++){
+        icl.push(date1[i].parserSum);
+        createTime.push(date1[i].createTime);
+    }
+    option = {
+        title: {
+            text: '爬虫抓取详细统计',
+            subtext: '真实数据'
+        },
+        tooltip: {
+            trigger: 'axis'
+        },
+        legend: {
+            data:['详情日请求次数']
+        },
+        toolbox: {
+            show: true,
+            feature: {
+                dataZoom: {
+                    yAxisIndex: 'none'
+                },
+                dataView: {readOnly: false},
+                magicType: {type: [ 'line','bar']},
+                restore: {},
+                saveAsImage: {}
+            }
+        },
+        xAxis:  {
+            type: 'category',
+            boundaryGap: true,
+            data: createTime
+        },
+        yAxis: {
+            type: 'value',
+            axisLabel: {
+                formatter: '{value}'
+            }
+        },
+        series: [
+            {
+                name:'详情日请求次数',
+                type:'bar',
+                label: {
+                    normal: {
+                        show: true,
+                        position: 'insideRight'
+                    }
+                },
+                data:icl,
+
+            }
+        ]
+    };
+
+
+    // 使用刚指定的配置项和数据显示图表。
+    myChart.setOption(option);
+
+
+    var startDate="";
+    var endDate="";
+    layui.use('laydate', function(){
+        var laydate = layui.laydate;
+
+        //执行一个laydate实例
+        laydate.render({
+            elem: '#startDate', //指定元素
+            done:function(value){
+
+                startDate=value;
+
+            }
+        });
+    });
+    layui.use('laydate', function(){
+        var laydate = layui.laydate;
+
+        //执行一个laydate实例
+        laydate.render({
+            elem: '#endDate', //指定元素
+            done:function(value){
+                endDate=value;
+                $.ajax({
+                    url:'/parser/getIpHttpDate.action?startDate='+startDate+'&endDate='+endDate,
+                    dataType:'json',
+                    async:false,
+                    type:'post',
+                    success:function (data) {
+                        date1=data;
+                    }
+
+                });
+
+                var icl=[];
+                var createTime=[];
+                for(var i=0;i<date1.length;i++){
+                    icl.push(date1[i].parserSum);
+                    createTime.push(date1[i].createTime);
+                }
+                option = {
+                    title: {
+                        text: '爬虫抓取详细统计',
+                        subtext: '真实数据'
+                    },
+                    tooltip: {
+                        trigger: 'axis'
+                    },
+                    legend: {
+                        data:['日请求次数']
+                    },
+                    toolbox: {
+                        show: true,
+                        feature: {
+                            dataZoom: {
+                                yAxisIndex: 'none'
+                            },
+                            dataView: {readOnly: false},
+                            magicType: {type: ['line', 'bar']},
+                            restore: {},
+                            saveAsImage: {}
+                        }
+                    },
+                    xAxis:  {
+                        type: 'category',
+                        boundaryGap: false,
+                        data: createTime
+                    },
+                    yAxis: {
+                        type: 'value',
+                        axisLabel: {
+                            formatter: '{value}'
+                        }
+                    },
+                    series: [
+                        {
+                            name:'日请求次数',
+                            type:'line',
+                            data:icl,
+
+                        }
+                    ]
+                };
+                myChart1.setOption(option);
+                var date1;
+                var myChart = echarts.init(document.getElementById('zhexian1'),'macarons');
+
+                $.ajax({
+                    url:'/parser/getHttpByDate.action?type=List&startDate='+startDate+'&endDate='+endDate,
+                    dataType:'json',
+                    async:false,
+                    type:'post',
+                    success:function (data) {
+                        date1=data;
+                    }
+
+                });
+                var icl=[];
+                var createTime=[];
+                for(var i=0;i<date1.length;i++){
+                    icl.push(date1[i].parserSum);
+                    createTime.push(date1[i].createTime);
+                }
+                option = {
+                    title: {
+                        text: '爬虫抓取详细统计',
+                        subtext: '真实数据'
+                    },
+                    tooltip: {
+                        trigger: 'axis'
+                    },
+                    legend: {
+                        data:['列表日请求次数']
+                    },
+                    toolbox: {
+                        show: true,
+                        feature: {
+                            dataZoom: {
+                                yAxisIndex: 'none'
+                            },
+                            dataView: {readOnly: false},
+                            magicType: {type: [ 'line','bar']},
+                            restore: {},
+                            saveAsImage: {}
+                        }
+                    },
+                    xAxis:  {
+                        type: 'category',
+                        boundaryGap: true,
+                        data: createTime
+                    },
+                    yAxis: {
+                        type: 'value',
+                        axisLabel: {
+                            formatter: '{value}'
+                        }
+                    },
+                    series: [
+                        {
+                            name:'列表日请求次数',
+                            type:'bar',
+                            label: {
+                                normal: {
+                                    show: true,
+                                    position: 'insideRight'
+                                }
+                            },
+                            data:icl,
+
+                        }
+                    ]
+                };
+
+
+                // 使用刚指定的配置项和数据显示图表。
+                myChart.setOption(option);
+                var date1;
+                var myChart = echarts.init(document.getElementById('zhexian2'),'macarons');
+
+                $.ajax({
+                    url:'/parser/getHttpByDate.action?type=detail&startDate='+startDate+'&endDate='+endDate,
+                    dataType:'json',
+                    async:false,
+                    type:'post',
+                    success:function (data) {
+                        date1=data;
+                    }
+
+                });
+                var icl=[];
+                var createTime=[];
+                for(var i=0;i<date1.length;i++){
+                    icl.push(date1[i].parserSum);
+                    createTime.push(date1[i].createTime);
+                }
+                option = {
+                    title: {
+                        text: '爬虫抓取详细统计',
+                        subtext: '真实数据'
+                    },
+                    tooltip: {
+                        trigger: 'axis'
+                    },
+                    legend: {
+                        data:['详情日请求次数']
+                    },
+                    toolbox: {
+                        show: true,
+                        feature: {
+                            dataZoom: {
+                                yAxisIndex: 'none'
+                            },
+                            dataView: {readOnly: false},
+                            magicType: {type: [ 'line','bar']},
+                            restore: {},
+                            saveAsImage: {}
+                        }
+                    },
+                    xAxis:  {
+                        type: 'category',
+                        boundaryGap: true,
+                        data: createTime
+                    },
+                    yAxis: {
+                        type: 'value',
+                        axisLabel: {
+                            formatter: '{value}'
+                        }
+                    },
+                    series: [
+                        {
+                            name:'详情日请求次数',
+                            type:'bar',
+                            label: {
+                                normal: {
+                                    show: true,
+                                    position: 'insideRight'
+                                }
+                            },
+                            data:icl,
+
+                        }
+                    ]
+                };
+
+
+                // 使用刚指定的配置项和数据显示图表。
+                myChart.setOption(option);
+
+
+
+            }
+        });
+    });
+
+
+
+
+</script>
+</body>
+</html>

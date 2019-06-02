@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+
+
+    <settings>
+
+        <!-- <setting name="logImpl" value="log4j"/> -->
+        <!-- 打开懒加载开关  -->
+        <!-- 	<setting name="lazyLoadingEnabled" value="true"/>
+            <setting name="aggressiveLazyLoading" value="false"/> -->
+        <!--配置  启用二级缓存  -->
+        <setting name="cacheEnabled" value="true"/>
+    </settings>
+
+
+
+
+
+    <typeAliases>
+        <!-- 单个别名定义 -->
+        <!-- <typeAlias alias="u" type="com.test.entity.User"/>
+        <typeAlias alias="book" type="com.test.entity.Book"/> -->
+
+
+
+
+
+        <!-- 批量别名定义，扫描整个包下的类，别名为类名（首字母大写或小写都可以）User user -->
+        <package name="com.ksrs.entity"/>
+
+
+    </typeAliases>
+
+
+
+    <mappers>
+
+
+
+        <package name="com.ksrs.dao" />
+
+    </mappers>
+</configuration>

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>更新数据源</title>
+    <link rel="stylesheet" href="/layui/css/layui.css" media="all">
+    <script src="/layui/jquery.min.js"></script>
+    <script src="/layui/layui.js"></script>
+    <script type="text/javascript" src="layui/layui.all.js"></script>
+</head>
+<body>
+<form class="layui-form"> <!-- 提示：如果你不想用form，你可以换成div等任何一个普通元素 -->
+    <div class="layui-form-item">
+        <label class="layui-form-label">数据源</label>
+        <div class="layui-input-block">
+            <input type="text" name="dataSource" id="dataSource" readonly="readonly" disabled="disabled" lay-verify="name" placeholder="请输入" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">添加描述</label>
+        <div class="layui-input-block">
+            <input type="text" name="describe" id="describe" lay-verify="name1" placeholder="请输入" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">对应Collection</label>
+        <div class="layui-input-block">
+            <input type="text" name="collection" id="collection"  placeholder="请输入" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">对应Source</label>
+        <div class="layui-input-block">
+            <input type="text" name="source" id="source"  placeholder="请输入" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button class="layui-btn" lay-submit lay-filter="*">立即提交</button>
+            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+        </div>
+    </div>
+</form>
+<script>
+    /**
+     * 用来回显需要修改的数据
+     * @param dataSource
+     * @param describe
+     * @param collection
+     * @param source
+     */
+    function test(dataSource,describe,collection,source){
+        document.getElementById("dataSource").value=dataSource;
+        document.getElementById("describe").value=describe;
+        document.getElementById("collection").value=collection;
+        document.getElementById("source").value=source;
+    }
+    layui.use(['form','layedit'], function(){
+        var form = layui.form;
+
+    form.on('submit(*)', function(data){
+        $.ajax({
+            url:'/comname/updateSource.action',
+            dataType:'json',
+            async:false,
+            type:'post',
+            data:data.field,
+            success:function (data) {
+                if(data.msg==='success'){
+                    layer.alert('更新成功',{
+                        skin: 'layui-layer-molv' //样式类名
+                        ,closeBtn: 0,
+
+                    },function (index) {
+                        layer.close(index);
+                        var index1 = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+                        parent.layer.close(index1); //再执行关闭
+
+                    });
+                }else{
+                    layer.alert('服务器发生异常，添加失败',{
+                        skin: 'layui-layer-lan' //样式类名
+                        ,closeBtn: 0,
+
+                    });
+                }
+            }
+
+        });
+        return false;
+    });
+    });
+
+
+</script>
+</body>
+</html>

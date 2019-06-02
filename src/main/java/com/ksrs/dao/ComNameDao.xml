@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.ksrs.dao.ComNameDao">
+    <select id="getAllName" resultType="com.ksrs.entity.ComName">
+        SELECT distinct name from crawlIncrement where data_state=1
+    </select>
+    <select id="getJxName" resultType="com.ksrs.entity.ComName">
+        select name from parser_count_statistics_save where TO_DAYS(createTime) =TO_DAYS(now())
+    </select>
+    <select id="getDataSource" resultType="com.ksrs.entity.ComName">
+        select "describe" as name,"dataSource" as describe,"collection" as collection,"source" as source from "dataSource"
+        <where>
+            <if test="ziduan!=null and ziduan.length()>0">
+                "describe" like '%${ziduan}%'
+            </if>
+        </where>
+    </select>
+    <select id="getJxSource" resultType="com.ksrs.entity.ComName">
+       select "describe" as name,"jxdatasource" as describe,"createTime" from "jxdataSource"
+    </select>
+    <insert id="insertDataSource">
+        insert into "dataSource"("dataSource","describe","collection","source") values(#{dataSource},#{describe},#{collection},#{source})
+    </insert>
+    <insert id="insertJxDataSource" parameterType="java.lang.String">
+        insert into "jxdataSource"("jxdatasource","describe") values(#{dataSource},#{describe})
+    </insert>
+    <select id="getClueminCompany" resultType="com.ksrs.entity.ComName">
+        select distinct user_company as name from cluemining_user
+    </select>
+
+    <update id="updateData" parameterType="com.ksrs.entity.ZqDataSource">
+        update "dataSource" set "describe"=#{describe},"collection"=#{collection},"source"=#{source} where "dataSource"=#{dataSource}
+    </update>
+
+    <select id="getPcpName" resultType="com.ksrs.entity.ComName">
+        select distinct user_company as name from cluemining_pcp_user
+    </select>
+</mapper>

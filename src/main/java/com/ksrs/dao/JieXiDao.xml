@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.ksrs.dao.JieXiDao">
+    <select id="getDate" resultType="com.ksrs.entity.JieXi">
+        SELECT n.name as name,t.name as JxName,n.number number,n.detNum as detNum ,n.detDate as detDate ,n.detNum/n.number as jxl,n.createTime as createTime FROM parser_type_save as t  JOIN   parser_count_statistics_save  as n  on SUBSTRING(t.code FROM 7)  = n.name where TO_DAYS(n.createTime) =TO_DAYS(#{date}) limit #{start},#{pagesize}
+
+    </select>
+    <select id="getData" resultType="com.ksrs.entity.JieXi">
+        SELECT n.name as name,t.name as JxName,n.number number,n.detNum as detNum ,n.detDate as detDate ,n.detNum/n.number as jxl,n.createTime as createTime FROM parser_type_save as t  JOIN   parser_count_statistics_save  as n  on SUBSTRING(t.code FROM 7)  = n.name where TO_DAYS(n.createTime) between (TO_DAYS(now())-2) and to_days(now()) limit #{start},#{pagesize}
+    </select>
+    <select id="getTotal" resultType="int">
+
+        SELECT count(*) FROM parser_type_save as t  JOIN   parser_count_statistics_save  as n  on SUBSTRING(t.code FROM 7)  = n.name where TO_DAYS(n.createTime) BETWEEN TO_DAYS(now())-2 and TO_DAYS(now())
+    </select>
+    <select id="getTotalByDate" resultType="int">
+        sELECT count(*) FROM parser_type_save as t  JOIN   parser_count_statistics_save  as n  on SUBSTRING(t.code FROM 7)  = n.name where TO_DAYS(n.createTime) = TO_DAYS(#{date})
+    </select>
+    <select id="getSumByDate" resultType="long" >
+        select sum(a.detNum-b.detNum)+110560+496 from(select detNum ,name from parser_count_statistics_save where TO_DAYS(createTime)=TO_DAYS(#{date})) a,
+        (select detNum ,name from parser_count_statistics) b where a.name=b.name
+    </select>
+</mapper>
